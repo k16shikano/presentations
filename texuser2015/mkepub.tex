@@ -1,0 +1,39 @@
+\begin{frame}[containsverbatim, t]{\inhibitglue CalibreかPandocでHTML→EPUB}
+  \sffamily
+
+  \begin{itemize}
+    \item 電子書籍管理アプリケーションのCalibreには、各種フォーマットの変換コマンド\texttt{ebook-convert}が用意されている\\
+    \begin{alltt}\small
+$ ebook-convert --extra-css=book.css {\bslash}
+                book.html book.epub
+    \end{alltt}
+    \item ただし、CalibreはEPUB2しか生成できないので、いまはPandocを使うのがよさそう\\
+    \begin{alltt}\small
+$ pandoc -t epub3 -o book.epub {\bslash}
+         --epub-stylesheet=book.css {\bslash}
+         book.html
+    \end{alltt}
+    \item 実際にはこんなオプションでは済まない！
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}[containsverbatim, t]{\inhibitglue 自力でやるのも現実的}
+  \sffamily
+
+  \begin{itemize}
+    \item HTMLをかき集めてメタ情報を用意すればいいので、難しくはない
+    \item 実際に自作して使っている\\
+    \begin{itemize}
+      \item qnda （\url{https://github.com/k16shikano/qnda}）
+      \item \LaTeX{}が自動生成する情報（\texttt{{\bslash}ref}とか連番）を生成するのが面倒
+      \item それでも、CalibreやPandocのオプションを調べるより楽だと思う（個人差があります）
+    \end{itemize}
+    \item いずれにせよ\texttt{epubcheck}を忘れずに\\
+    \begin{alltt}\small
+$ java -jar epubcheck.jar book.epub
+    \end{alltt}
+  \end{itemize}
+
+\end{frame}
+

@@ -1,0 +1,79 @@
+\begin{frame}[containsverbatim, t]{\inhibitglue \TeX{}4ht}
+  \sffamily
+  
+  \begin{itemize}
+    \item プロ向けにはよく使われているらしい
+    \item 基本的な仕組みは、\\
+    \begin{itemize}
+\item[\color{black}1.] HTML構造用のヒントを\texttt{{\bslash}special}で埋め込んだ特別なdviを作るパッケージを読み込む\\
+    \begin{alltt}\scriptsize
+{\bslash}documentclass\{jsbook\}
+...
+{\bslash}usepackage[xhtml,mathml,charset=utf-8]\{tex4ht\}
+...
+{\bslash}begin\{document\}
+    \end{alltt}
+\item[\color{black}2.] 生成された特殊なdviを、\texttt{tex4ht}というコマンドで処理すると、HTMLができる
+\item[\color{black}3.] さらに\texttt{t4ht}というコマンドで処理することでCSSを作る
+    \end{itemize}
+    \item \texttt{tex4ht}コマンドは、\texttt{platex}で処理されたdvi（に指定されている日本語用のjfm）を読めない！
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[containsverbatim, t]{\inhibitglue \TeX{}4htを日本語で使う方法、その１}
+  \sffamily
+  
+  \begin{itemize}
+    \item p\TeX{}を使わなければいい
+    \item TeX4ebookというパッケージの機能を利用してfontspecを使う\\
+    \begin{alltt}\scriptsize
+{\bslash}documentclass\{book\} % jbook/jsbookはNG
+{\bslash}usepackage\{alternative4ht\}
+{\bslash}altusepackage\{fontspec\}
+{\bslash}altusepackage\{xeCJK\}
+{\bslash}altusepackage\{xunicode\}
+{\bslash}setCJKmainfont\{IPAMincho\}
+...
+{\bslash}begin\{document\}
+    \end{alltt}
+    \item 実行にはLua\LaTeX{}が必要（\texttt{-l}オプション）\\
+    \begin{alltt}\small
+$ make4ht -l book.tex
+    \end{alltt}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[containsverbatim, t]{\inhibitglue \TeX{}4htを日本語で使う方法、その２}
+  \sffamily
+  
+  \begin{itemize}
+    \item 1つめの方法だとp\TeX{}のプリミティブが封じられる
+    \item \texttt{platex}でコンパイルしたdviを\texttt{tex4ht}に読ませる手段はないか？
+    \item \texttt{tex4ht}が読めないp\TeX{}由来のdvi命令\texttt{set2 \#N}を、\texttt{set\_char\_\#n}命令に変換できないか？
+    \item 実はj\TeX{}は\texttt{set\_char\_\#n}命令だけで日本語の\\ 文字を印字している！
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[containsverbatim, t]{\inhibitglue p\TeX{}のdviをj\TeX{}のdviに変換}
+  \sffamily
+  
+  \begin{itemize}
+    \item 必要なもの：\\
+    \begin{itemize}
+      \item \texttt{dvi2dvi}
+      \item \texttt{dvi2dvi}が使う仮想フォント{\scriptsize （Debianならdvi2ps-fontdata-a2n）}
+      \item \texttt{jtex}用の\texttt{(dgj|dmj)*.tfm}{\scriptsize（Debianならjtex-base）}
+      \item \texttt{tex4ht}が使う、\texttt{(dgj|dmj)*.tfm}からHTML用の文字への対応表{\scriptsize （このチートを開発した行木孝夫先生がむかし作ったものがW32\TeX{}に同梱されている）}
+    \end{itemize}
+    \item 実行手順：\\
+    \begin{alltt}\scriptsize
+$ platex book.dvi
+$ dvi2dvi -F a2n -S book.dvi > book-ntt.dvi
+$ tex4ht -i~/texmf/tex4ht/ht-fonts/ja/dnp {\bslash} 
+         -cunihtf -utf8 book-ntt.dvi
+    \end{alltt}
+    \item （ひょっとしてW32\TeX{}ではこれを自動でやってくれる？）
+  \end{itemize}
+\end{frame}
+
+

@@ -1,0 +1,26 @@
+\begin{frame}[containsverbatim, t]{\inhibitglue \LaTeX{}ml}
+  \sffamily
+  
+  \begin{itemize}
+    \item \TeX{}の消化の仕組みをPerlで模倣し、出力ルーチンの代わりにDOMを組み立てて生のXMLを吐き出すイメージ
+    \item 吐き出したXMLをXSLTで後処理して使う
+    \item 独自の\TeX{}マクロや\LaTeX{}コマンド・環境に対する処理を、Perlのモジュールを書いて追加できる\\
+    \begin{alltt}\small
+DefMacro('{\bslash}mybold\{\}','{\bslash}textbf\{#1\}');
+    \end{alltt}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[containsverbatim, t]{\inhibitglue \LaTeX{}ml（つづき）}
+  \sffamily
+  
+  \begin{itemize}
+    \item 精力的に開発されているようで、昨年の時点でTikZサポート率では\TeX{}4htを抜いたらしい
+    \item 2014年5月には、直接EPUBを作ることも可能になっている\\
+    \begin{alltt}\small
+$ latexml --inputencoding=utf8 {\bslash}
+          --dest=test.xhtml test.tex
+$ latexmlpost --format=epub test.xhtml
+    \end{alltt}
+  \end{itemize}
+\end{frame}

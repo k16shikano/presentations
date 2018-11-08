@@ -1,0 +1,43 @@
+\begin{frame}[t]{\inhibitglue 書籍に必要なのはコンテンツとメタ情報}
+  \sffamily
+
+  \begin{itemize}
+    \item 大量のメタ情報が、リーダーで表示したり流通に乗せたりするために必要\\
+    \begin{itemize}
+      \item 書名、書名の読み、書名の種類、同一書名で別バージョンの本を区別する情報、シリーズ中の順番、原書名
+      \item 著者名、著者名の別表記
+      \item 発行日、改訂日、重刷日
+      \item 出版社、製作所、コピーライト
+      \item ISBNとかDOIとか出版社独自の番号のような識別子
+    \end{itemize}
+    \item EPUB3では、作り手がメタ情報を破綻なく拡張もできる仕組み（\texttt{<meta>}要素）がある
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue 文書の構造も一種のメタ情報}
+  \sffamily
+
+  \begin{itemize}
+    \item 適切に意味付けされた構造は、アクセシビリティにとって重要\\
+    \begin{itemize}
+      \item そもそも再生に支障をきたす
+      \item 読み上げとページめくりの同期とか、付加価値のある機能を提供するために必要
+      \item コンテンツの再利用性は高いほうがいい
+    \end{itemize}
+    \item ナビゲーション（論理的な目次）がうまく機能するためには構造が必要
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue EPUB vs. PDF \\ $\approx$ 構造とメタ情報\, vs. 見た目}
+  \sffamily
+
+  \begin{itemize}
+    \item EPUBは、多くの読者にとって、見た目と手軽さではPDFに劣る
+    \item 流通やアクセシビリティを考えると、書籍としてのメリットが出始めている
+  \end{itemize}
+  \pause
+  \begin{itemize}
+    \item ただしPDF/UA（もしくはタグ付きPDF）のような規格もあるので「PDFはアクセシビリティだめ」というわけではない
+  \end{itemize}
+\end{frame}
+

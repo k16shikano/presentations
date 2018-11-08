@@ -1,0 +1,28 @@
+\begin{frame}[t]{\inhibitglue EPUBとは}
+  \sffamily
+
+  \begin{itemize}
+    \item 電子書籍の標準フォーマットの規格
+    \item 2007年9月にIDPF（\ruby{国際電子出版フォーラム}{International Digital Publishing Forum}）が策定した
+    \item 2011年10月に現行のメジャーバージョンであるEPUB3が策定された
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue EPUB には HTML が必要}
+  \sffamily
+
+  \begin{itemize}
+    \item EPUB $\subset $ HTMLをZIPで固めたもの\\
+    \begin{itemize}
+      \item 実際には、ZIPの中にはHTML以外にどんなメディアをいれてもいい
+      \item 規格上、テキストとして再生してもらえることになっているのは、HTMLとSVGのみ
+    \end{itemize}
+    \item レイアウトはCSSのみで指定する。JavaScriptは基本的に使えない
+    \item EPUB3ではHTML5をサポートしているので、MathMLが使えることになっている\\
+    \begin{itemize}
+      \item \TeX{}ユーザにとっては朗報ですね
+    \end{itemize}
+  \end{itemize}
+  
+\end{frame}
+

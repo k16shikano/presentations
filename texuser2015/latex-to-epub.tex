@@ -1,0 +1,125 @@
+\documentclass[14pt,dvipdfmx,uplatex]{beamer}
+\usetheme{Madrid} 
+\setbeamertemplate{footline}[page number]{}
+\beamertemplatenavigationsymbolsempty
+\usepackage{mypresentation}
+\AtBeginShipoutFirst{\special{pdf:tounicode UTF8-UCS2}}
+\usepackage{shapepar}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usepackage[noalphabet]{pxchfon}
+\input{jpncolor}
+
+\setgothicfont{migmix-2p-bold.ttf}
+%\setgothicfont{YasashisaBold.ttf}
+%\setminchofont{migmix-2p-bold.ttf} % 本文
+\mathversion{bold}
+
+\setbeamerfont{title}{size=\HUGE{28}{34},family={\yasagoth}}
+\setbeamerfont{frametitle}{size=\HUGE{20}{28},series={\yasagoth}}
+\setbeamerfont{frametext}{size=\HUGE{17}{24},series={\yasagoth}}
+\setbeamertemplate{frametitle}[default][left]
+\usefonttheme{professionalfonts}
+
+\setbeamercolor{background}{bg=white}
+\setbeamercolor{author}{fg=black}
+\setbeamercolor{date}{fg=black}
+\setbeamercolor{title}{fg=white, bg=kachi}
+\setbeamercolor{frametitle}{fg=white}
+\setbeamercolor{normal text}{fg=black}
+\setbeamerfont{normal text}{family=\rmfamily, series=\bfseries}
+\setbeamercolor{structure}{fg=black}
+
+\makeatletter
+\define@key{beamerframe}{t}[true]{% top
+  \beamer@frametopskip=.2cm plus .5\paperheight\relax%
+  \beamer@framebottomskip=0pt plus 1fill\relax%
+  \beamer@frametopskipautobreak=\beamer@frametopskip\relax%
+  \beamer@framebottomskipautobreak=\beamer@framebottomskip\relax%
+  \def\beamer@initfirstlineunskip{}%
+}
+\def\header#1{\vskip.5\baselineskip{\large\sffamily #1}}
+\makeatother
+
+\setlength{\leftmargini}{12pt}
+\setlength{\leftmarginii}{12pt}
+
+\title{\TeX 原稿から\\ EPUBを作りたい}
+\author{\sffamily 鹿野 桂一郎\\
+\small\bfseries \email{k16.shikano@gmail.com} \\ 
+\twitter{golden\_lucky} 
+}
+\date{\sffamily\footnotesize 2015年11月7日\\ \TeX{}ユーザの集い2015}
+
+\begin{document}
+\fontseries{ub}\selectfont
+
+%{\usebackgroundtemplate{\includegraphics[height=1.1\paperheight]{skyrocket.jpg}}%
+\frame{\titlepage}
+%}
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=kachi!15]
+\setbeamercolor{frametitle}{bg=kachi, fg=white}
+\setbeamercolor{structure}{fg=kachi}
+
+\begin{frame}[plain]
+  \begin{center}
+    \HUGE{34}{34}\color{kachi}\yasagoth
+    EPUBの\\ なにがうれしいか
+  \end{center}
+\end{frame}
+
+\include{whatisepub}
+
+\include{reflow}
+\include{meta}
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=yamabuki!15]
+\setbeamercolor{frametitle}{bg=yamabuki, fg=black}
+\setbeamercolor{structure}{fg=yamabuki}
+
+\begin{frame}[plain]
+  \begin{center}
+    \HUGE{34}{34}\color{black}\yasagoth
+    \TeX{}をHTMLに\\ 変換したい
+  \end{center}
+\end{frame}
+
+\include{html}
+\include{latexml}
+\include{tex4ht}
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=kyara!15]
+\setbeamercolor{frametitle}{bg=kyara, fg=white}
+\setbeamercolor{structure}{fg=kyara}
+
+\begin{frame}[plain]
+  \begin{center}
+    \HUGE{34}{34}\color{kachi}\yasagoth
+    HTMLをEPUBにする
+  \end{center}
+\end{frame}
+
+\include{mkepub}
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=matsuba!15]
+\setbeamercolor{frametitle}{bg=matsuba, fg=white}
+\setbeamercolor{structure}{fg=matsuba}
+
+\begin{frame}[plain]
+  \begin{center}
+    \HUGE{34}{34}\color{kachi}\yasagoth
+    \TeX{}ユーザが\\ EPUBを気にする必要はあるのか？
+  \end{center}
+\end{frame}
+
+\include{texuser}
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=black!15]
+\setbeamercolor{frametitle}{bg=black, fg=white}
+\setbeamercolor{structure}{fg=black}
+
+\include{reference}
+
+\end{document}
+

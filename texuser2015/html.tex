@@ -1,0 +1,85 @@
+\begin{frame}[t]{\inhibitglue \TeX{}→HTML変換の要件}
+  \sffamily
+
+  \begin{itemize}
+    \item EPUBの仕様にかなったHTMLになること\\
+    \begin{itemize}
+      \item XML版のHTML5であること
+      \item 要素のid属性や図に重複がないこと
+    \end{itemize}
+    \item 本の構造にかなったHTMLになること\\
+    \begin{itemize}
+      \item 本の中の位置に見合った連番
+      \item 相互参照
+    \end{itemize}
+    \item 手作業でHTMLを編集しないで済むこと\\
+    \begin{itemize}
+      \item \TeX{}原稿から完全に機械的に変換したい
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue 数式について}
+  \sffamily
+  \begin{itemize}
+    \item EPUB3ではMathML（Presentational）が\\ サポートされているので、MathMLに変換すればよい
+    \item Kindleでも出したかったら、SVGの画像にして\\ おくのがベストプラクティス
+    \item MathJaxのことは忘れましょう\\
+      \begin{itemize}
+        \item JavaScriptが動くEPUB3リーダーはいまのところ一般的ではない
+        \item 動いても、ネットワークもしくはmathjaxパッケージと\\ 数式用フォントの埋め込みが必要で、専用リーダーには\\ 非現実的
+      \end{itemize}
+    \pause
+    \item いずれにせよ、ツールでなんとかなる時代になっています
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue \TeX{}からHTMLを手に入れる方法まとめ}
+  \sffamily
+
+  \begin{enumerate}
+    \item[\sffamily\color{black}{１.}] \underline{テキストフィルタ型}\\
+    \begin{itemize}
+      \item \TeX{}原稿をテキストとしてパーズし、HTMLとして出力
+      \item Pandoc、\LaTeX{}2htmlなど
+      \item 気軽に使えるが、拡張性はほぼない
+    \end{itemize}
+    \item[\sffamily\color{black}{２.}] \underline{TeXエミュレート型}\\
+    \begin{itemize}
+      \item \TeX{}の処理（トークンを読み込んで箱を並べる）を模倣
+      \item \LaTeX{}ml、plas\TeX{}、HeVeAなど
+      \item 良好な結果がえられるが、独自のTeXマクロなどは自力で拡張が必要
+    \end{itemize}
+    \item[\sffamily\color{black}{３.}] \underline{DVIウェア型}\\
+    \begin{itemize}
+      \item \LaTeX{} にDVIを作らせて、それをHTMLにする
+      \item \TeX{}4htなど
+      \item ほぼ無敵（p\TeX{}を除く）だが、文書の構造が取れるわけではない
+    \end{itemize}
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue \TeX{}からHTMLを手に入れる方法まとめ}
+  \sffamily
+
+  \begin{enumerate}
+    \item[\sffamily\color{black}{１.}] \underline{テキストフィルタ型}\\
+    \begin{itemize}
+      \item \TeX{}原稿をテキストとしてパーズし、HTMLとして出力
+      \item Pandoc、\LaTeX{}2htmlなど
+      \item 気軽に使えるが、拡張性はほぼない
+    \end{itemize}
+    \item[\sffamily\color{black}{２.}] \underline{TeXエミュレート型}\\
+    \begin{itemize}
+      \item \TeX{}の処理（トークンを読み込んで箱を並べる）を模倣
+      \item {\color{shozyohi}\LaTeX{}ml}、plas\TeX{}、HeVeAなど
+      \item 良好な結果がえられるが、独自のTeXマクロなどは自力で拡張が必要
+    \end{itemize}
+    \item[\sffamily\color{black}{３.}] \underline{DVIウェア型}\\
+    \begin{itemize}
+      \item \LaTeX{} にDVIを作らせて、それをHTMLにする
+      \item {\color{shozyohi}\TeX{}4ht}など
+      \item ほぼ無敵（p\TeX{}を除く）だが、文書の構造が取れるわけではない
+    \end{itemize}
+  \end{enumerate}
+\end{frame}
