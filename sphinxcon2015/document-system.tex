@@ -1,0 +1,142 @@
+\documentclass[14pt,dvipdfmx,uplatex]{beamer}
+\usetheme{Madrid} 
+\setbeamertemplate{footline}[page number]{}
+\beamertemplatenavigationsymbolsempty
+\usepackage{mypresentation}
+%\AtBeginShipoutFirst{\special{pdf:tounicode EUC-UCS2}}
+\usepackage{shapepar}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usetikzlibrary{shapes.callouts}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{positioning}
+
+\usepackage[noalphabet]{pxchfon}
+\input{jpncolor}
+
+\setgothicfont{migmix-2p-bold.ttf}
+%\setgothicfont{YasashisaBold.ttf}
+%\setminchofont{migmix-2p-bold.ttf} % 本文
+\mathversion{bold}
+
+\setbeamerfont{title}{size=\HUGE{28}{34},family={\yasagoth}}
+\setbeamerfont{frametitle}{size=\HUGE{20}{28},series={\yasagoth}}
+\setbeamerfont{frametext}{size=\HUGE{17}{24},series={\yasagoth}}
+\setbeamertemplate{frametitle}[default][left]
+\usefonttheme{professionalfonts}
+
+\setbeamercolor{background}{bg=white}
+\setbeamercolor{author}{fg=black}
+\setbeamercolor{date}{fg=black}
+\setbeamercolor{title}{fg=white, bg=kachi}
+\setbeamercolor{frametitle}{fg=white}
+\setbeamercolor{normal text}{fg=black}
+\setbeamerfont{normal text}{family=\rmfamily, series=\bfseries}
+\setbeamercolor{structure}{fg=black}
+
+\makeatletter
+\define@key{beamerframe}{t}[true]{% top
+  \beamer@frametopskip=.2cm plus .5\paperheight\relax%
+  \beamer@framebottomskip=0pt plus 1fill\relax%
+  \beamer@frametopskipautobreak=\beamer@frametopskip\relax%
+  \beamer@framebottomskipautobreak=\beamer@framebottomskip\relax%
+  \def\beamer@initfirstlineunskip{}%
+}
+\def\header#1{\vskip.5\baselineskip{\large\sffamily #1}}
+\tikzset{
+  notice/.style  = { fill=shozyohi, white, 
+                     rectangle callout, 
+                     rounded corners,
+                     callout absolute pointer={#1} }
+}
+\makeatother
+
+\setlength{\leftmargini}{12pt}
+\setlength{\leftmarginii}{12pt}
+
+\title{ドキュメントシステムは\\ これを使え\\ 2015年版}
+\author{\sffamily 鹿野 桂一郎\\
+\small\bfseries \email{k16.shikano@gmail.com} \\ 
+\twitter{golden\_lucky} 
+}
+\date{\sffamily\footnotesize 2015年11月24日\\ 於\, SphinxCon JP 2015}
+
+\begin{document}
+\fontseries{ub}\selectfont
+
+%{\usebackgroundtemplate{\includegraphics[height=1.1\paperheight]{skyrocket.jpg}}%
+\frame{\titlepage}
+%}
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=black!15]
+\setbeamercolor{frametitle}{bg=black, fg=white}
+\setbeamercolor{structure}{fg=black}
+
+\include{who}
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=kyara!15]
+\setbeamercolor{frametitle}{bg=kyara, fg=white}
+\setbeamercolor{structure}{fg=kyara}
+
+\begin{frame}[plain]
+\setlength{\textwidth}{115mm}
+  \begin{center}
+    \HUGE{34}{34}\color{kachi}\yasagoth
+    ドキュメントシステムとは
+  \end{center}
+\end{frame}
+
+%\begin{frame}[plain]
+%  \HUGE{24}{34}\color{kachi}\yasagoth
+%  \noindent ドキュメントシステムとは
+%  
+%  \begin{tcolorbox}\small\rmfamily
+%  \HUGE{25}{32}
+%  テキスト原稿を、人間が視覚的に読みやすくレイアウトする仕組み
+%  \end{tcolorbox}
+%\end{frame}
+
+\include{what}
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=kachi!15]
+\setbeamercolor{frametitle}{bg=kachi, fg=white}
+\setbeamercolor{structure}{fg=kachi}
+
+\begin{frame}[plain]
+  \begin{center}
+    \HUGE{34}{34}\color{kachi}\yasagoth
+    マークアップから\\ 考える
+  \end{center}
+\end{frame}
+
+\include{markup}
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=yamabuki!15]
+\setbeamercolor{frametitle}{bg=yamabuki, fg=black}
+\setbeamercolor{structure}{fg=yamabuki}
+
+\begin{frame}[plain]
+  \begin{center}
+    \HUGE{34}{34}\color{black}\yasagoth
+    出力の用途から\\ 考える
+  \end{center}
+\end{frame}
+
+\include{chart}
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=miru!15]
+\setbeamercolor{frametitle}{bg=miru, fg=white}
+\setbeamercolor{structure}{fg=miru}
+
+\begin{frame}[plain]
+  \begin{center}
+    \HUGE{34}{34}\color{miru}\yasagoth
+    結論
+  \end{center}
+\end{frame}
+
+\include{how}
+
+\include{reference}
+
+\end{document}

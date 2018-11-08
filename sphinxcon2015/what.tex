@@ -1,0 +1,181 @@
+
+\def\software{\color{black}}
+\def\book{\color{black}}
+\def\markup{\color{black}}
+\def\wysiwyg{\color{black}}
+\def\historical{\color{black}}
+\def\utility{\color{black}}
+\def\formatter{\color{black}}
+\def\cms{\color{black}}
+
+\def\documentsystems{%
+  \HUGE{10}{11}\vskip-\baselineskip
+  \begin{columns}[t]
+    \begin{column}{.28\textwidth}
+    \begin{itemize}
+      \item {\software POD}
+      \item {\software Javadocなど}
+      \item {\software WEB}
+      \item {\software Sphinx}
+%      \item {\software lhs2TeX}
+
+      \item {\book Re:VIEW}
+      \item {\book EWB}
+      \item {\book CAS-UB}
+      \item {\book Atlas}
+      \item {\book Gitbook}
+      \item {\book PressBooks}
+%      \item {\book Leanpub}
+      \item {\book Booktype}
+      \item {\book IGP digital publisher}
+      \item {\book BCCKS}
+      \item {\book でんでんコンバータ}
+%      \item {\book ideotype}
+    \end{itemize}
+    \end{column}
+    \begin{column}{.37\textwidth}
+    \begin{itemize}
+      \item {\markup Markdown}
+      \item {\markup Wiki記法}
+      \item {\markup reStructuredText}
+      \item {\markup RD、RDoc}
+      \item {\markup AsciiDoc}
+      \item {\markup HTMLBook}
+      \item {\markup DocBook}
+      \item {\markup DITA、JATS}
+      \item {\markup \LaTeX とか}
+
+      \item {\utility Docutils}
+      \item {\utility Calibre}
+      \item {\utility Pandoc}
+
+      \item {\wysiwyg Word（MS Office）}
+      \item {\wysiwyg Writer（LibreOffice）}
+      \item {\wysiwyg Adobe InDesign}
+      \item {\wysiwyg Adobe FrameMaker}
+%      \item {\wysiwyg Scribus}
+    \end{itemize}
+    \end{column}
+    \begin{column}{.31\textwidth}
+    \begin{itemize}
+      \item {\formatter AH Formatter}
+      \item {\formatter Prince}
+      \item {\formatter Apache FOP}
+
+      \item {\formatter Vivliostyle}
+
+      \item {\formatter \TeX エンジン}
+      
+      \item {\formatter ブラウザエンジン}
+      \item {\formatter CSS Books}
+
+      \item {\formatter cl-typesetting + cl-pdf}
+
+      \item {\cms Wikipedia}
+      \item {\cms WordPress}
+
+      \item {\historical Scribe}
+      \item {\historical roff系}
+      \item {\historical Setext}
+      \item {\historical Jade（SGML+DSSSL）}
+    \end{itemize}
+    \end{column}
+  \end{columns}
+}
+
+\begin{frame}[t]{\inhibitglue 思いつくキーワードを挙げてみた}
+  \sffamily
+  \documentsystems
+  
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue 歴史遺産}
+  \sffamily
+  \def\historical{\color{shozyohi}}
+  \documentsystems
+\end{frame}
+  \def\historical{\color{torinoko}}
+
+\begin{frame}[t]{\inhibitglue CMS}
+  \sffamily
+  \def\cms{\color{shozyohi}}
+  \documentsystems
+\end{frame}
+
+  \def\cms{\color{torinoko}}
+
+\begin{frame}[t]{\inhibitglue DTPソフト}
+  \sffamily
+  \def\wysiwyg{\color{shozyohi}}
+  \documentsystems
+\end{frame}
+
+  \def\wysiwyg{\color{torinoko}}
+
+\begin{frame}[t]{\inhibitglue 入力{\footnotesize （ マークアップ、XMLアプリケーションなど）}}
+  \sffamily
+  \def\markup{\color{moegi}}
+  \documentsystems
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue 出力{\footnotesize （フォーマッタ、スタイルシートなど）}}
+  \sffamily
+  \def\markup{\color{black}}
+  \def\utility{\color{black}}
+  \def\formatter{\color{ruri}}
+  \def\wysiwyg{\color{ruri}}
+  \documentsystems
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue 汎用変換ツール}
+  \sffamily
+  \def\book{\color{black}}
+  \def\markup{\color{black}}
+  \def\formatter{\color{black}}
+  \def\utility{\color{black!20!ginshu}}
+  \documentsystems
+\end{frame}
+
+  \def\markup{\color{moegi}}
+  \def\formatter{\color{ruri}}
+  \def\wysiwyg{\color{ruri}}
+  \def\utility{\color{ginshu}}
+
+\begin{frame}[t]{\inhibitglue ソフトウェアのドキュメント向け}
+  \sffamily
+
+  \def\software{\color{shozyohi}}
+  
+  \documentsystems
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue 書籍向け（特化）}
+  \sffamily
+  \def\software{\color{black}}
+  \def\book{\color{shozyohi}}
+  \documentsystems
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue ドキュメントシステムを特徴づける要素}
+  \sffamily
+
+  \begin{itemize}
+    \item 入力方法（マークアップ方法）\\
+      \begin{itemize}
+        \item レイアウトの指定方法
+        \item 構造の指定方法
+        \item メタ情報の指定方法
+      \end{itemize}
+    \item 出力の用途（品質）\\
+      \begin{itemize}
+        \item APIマニュアル
+        \item Webサイト
+        \item 単一記事
+        \item 電子書籍
+        \item 紙書籍
+      \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+

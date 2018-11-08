@@ -1,0 +1,100 @@
+%%%%% よく使うパッケージ
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{color}
+\usepackage{colortbl}%
+\usepackage{tcolorbox}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{alltt}
+\usepackage{verbatim}
+\usepackage{okumacro}
+\usepackage{ifthen}
+\usepackage{atbegshi}
+\usepackage{multirow}
+
+%%%%% フォント設定
+\usepackage{type1cm}
+\usepackage[T1]{fontenc}
+\usepackage[deluxe, uplatex]{otf}
+\usepackage{textcomp}
+\usepackage[scaled]{helvet}
+\usepackage[nolucidascale]{lucidabr}
+%\ybaselineshift=0.1zh
+\DeclareFontFamily{JY2}{ygt}{}
+\DeclareFontFamily{JT2}{ygt}{}
+\DeclareFontShape{JY2}{ygt}{b}{n}{<-> s * [\utf@sc@le] nmlyasab-h}{}
+\DeclareFontShape{JT2}{ygt}{b}{n}{<-> s * [\utf@sc@le] nmlyasab-v}{}
+\DeclareRobustCommand\yasagoth{\bfseries\sffamily%
+  \usefont{JY2}{ygt}{b}{n}}
+\def\@setfontsize#1#2#3{\@nomath#1%
+  \ifx\protect\@typeset@protect
+    \let\@currsize#1%
+  \fi
+  \fontsize{#2}{#3}\selectfont
+  \ifdim\parindent>\z@ \parindent=1zw \fi
+  \kanjiskip=0zw plus .1zw minus .01zw
+  \xkanjiskip=0.25em plus 0.15em minus 0.06em}
+\DeclareRobustCommand\rmfamily
+        {\not@math@alphabet\rmfamily\mathrm
+         \romanfamily\rmdefault\kanjifamily\mcdefault\selectfont}
+\DeclareRobustCommand\sffamily
+        {\not@math@alphabet\sffamily\mathsf
+         \romanfamily\sfdefault\kanjifamily\gtdefault\selectfont}
+\DeclareRobustCommand\ttfamily
+        {\not@math@alphabet\ttfamily\mathtt
+         \romanfamily\ttdefault\kanjifamily\gtdefault\selectfont}
+\normalsize
+
+%%%%% 禁則
+\prebreakpenalty`」=10000
+\postbreakpenalty`「=10000
+\prebreakpenalty`～=10000
+\postbreakpenalty`（=10000
+\predisplaypenalty = 0
+\postdisplaypenalty = 0
+\clubpenalty = 0
+\widowpenalty = 0
+
+%%%%% アミの定義
+\definecolor{10gray}{gray}{.9}%
+\definecolor{20gray}{gray}{.8}%
+\definecolor{30gray}{gray}{.7}%
+\definecolor{50gray}{gray}{.5}%
+\definecolor{70gray}{gray}{.3}%
+\definecolor{RoyalBlue}{RGB}{65,105,225}
+\definecolor{OliveGreen}{RGB}{46,139,87}
+\definecolor{Sienna}{RGB}{30,144,255}
+\definecolor{Orange}{RGB}{255,69,0}
+\definecolor{DarkGreen}{RGB}{0,100,0}
+
+
+\newcommand{\HUGE}[2]{\fontsize{#1}{#2}\selectfont}
+
+\newenvironment{code}{%
+  \begin{alltt}%
+    \renewcommand{\baselinestretch}{0.85}%
+    {\usefont{T1}{pcr}{m}{n}}%
+      \DeclareFontShape{T1}{pcr}{mc}{n}{<-> pcrr8tn}{}%
+    \usefont{T1}{pcr}{mc}{n}}{%
+  \end{alltt}%
+}
+
+\def\bslash{\raisebox{.3mm}{\scalebox{1.1}[0.75]{\(\backslash\)}}}
+\def\numbermark{\symbol{35}}
+\def\boldtt#1{%
+  {\sffamily{\usefont{T1}{pcr}{b}{n}\scalebox{.85}[1.0]{#1}}\hspace{1.5pt plus 0.5pt minus 1.5pt}}}
+\newcommand{\myurl}{\begingroup%
+  \def\UrlBreaks{\do\\\do\/\do\_\do\-\do\+\do\=\do\:\do\>}
+  \def\UrlSpecials{\do\ {\Url@space}\do\%{\Url@percent}\do\^^M{\Url@space}%
+    \Url@force@Tilde}%
+  {\usefont{T1}{pcr}{m}{n}}%
+    \DeclareFontShape{T1}{pcr}{mc}{n}{<-> pcrr8tn}{}%
+  \usefont{T1}{pcr}{mc}{n}%
+  \Url}
+\urlstyle{pcr}
+
+\def\gosh{{\color{RoyalBlue}gosh>}}
+
+\def\email#1{\href{mailto:#1}{\texttt{#1}}}
+\def\twitter#1{\href{http://twitter.com/#1}{\texttt{@#1}}}
