@@ -1,0 +1,69 @@
+% bxexpl3ptex.sty
+
+%% package declaration
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{bxexpl3ptex}[2015/07/28 v0.3]
+
+%% hack for \ifpdfprimitive
+\let\bxqxp@postproc\relax
+\expandafter\ifx\csname ifpdfprimitive\endcsname\relax
+  \expandafter\@firstofone
+\else \expandafter\@gobble
+\fi {%
+  \let\bxqxp@ifpdfprimitive\ifpdfprimitive
+  \let\ifpdfprimitive\ifdefined
+  \def\bxqxp@postproc{%
+    \let\ifpdfprimitive\bxqxp@ifpdfprimitive
+    \let\bxqxp@ifpdfprimitive\@undefined
+    \let\bxqxp@postproc\relax
+  }%
+}
+
+%% do it
+\RequirePackageWithOptions{expl3}
+\bxqxp@postproc
+\ExplSyntaxOn
+
+%--------------------------------------- adjustments
+
+\cs_new_eq:NN \ptex_if_engine:T    \use_none:n
+\cs_new_eq:NN \ptex_if_engine:F    \use:n
+\cs_new_eq:NN \ptex_if_engine:TF   \use_ii:nn
+\cs_new_eq:NN \ptex_if_engine_p:   \c_false_bool
+\cs_new_eq:NN \uptex_if_engine:T   \use_none:n
+\cs_new_eq:NN \uptex_if_engine:F   \use:n
+\cs_new_eq:NN \uptex_if_engine:TF  \use_ii:nn
+\cs_new_eq:NN \uptex_if_engine_p:  \c_false_bool
+
+\str_if_eq_x:nnT { \token_to_meaning:N \kanjiskip }
+  { \token_to_str:N \kanjiskip }
+  {
+    % I'm pTeX! The current judge is:
+    %   pdftex_if_engine = true
+    %   luatex_if_engine = false
+    %   xetex_if_engine  = false
+    \cs_gset_eq:NN \ptex_if_engine:T    \use:n
+    \cs_gset_eq:NN \ptex_if_engine:F    \use_none:n
+    \cs_gset_eq:NN \ptex_if_engine:TF   \use_i:nn
+    \cs_gset_eq:NN \ptex_if_engine_p:   \c_true_bool
+    % I'm not pdfTeX.
+    \cs_gset_eq:NN \pdftex_if_engine:T  \use_none:n
+    \cs_gset_eq:NN \pdftex_if_engine:F  \use:n
+    \cs_gset_eq:NN \pdftex_if_engine:TF \use_ii:nn
+    \cs_gset_eq:NN \pdftex_if_engine_p: \c_false_bool
+  }
+
+\str_if_eq_x:nnT { \token_to_meaning:N \forcecjktokens }
+  { \token_to_str:N \forcecjktokens }
+  {
+    % I'm upTeX!
+    \cs_gset_eq:NN \uptex_if_engine:T   \use:n
+    \cs_gset_eq:NN \uptex_if_engine:F   \use_none:n
+    \cs_gset_eq:NN \uptex_if_engine:TF  \use_i:nn
+    \cs_gset_eq:NN \uptex_if_engine_p:  \c_true_bool
+  }
+
+%--------------------------------------- done
+\ExplSyntaxOff
+\endinput
+%% EOF

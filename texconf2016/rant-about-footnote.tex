@@ -1,0 +1,381 @@
+\documentclass[14pt,dvipdfmx,uplatex]{beamer}
+\usetheme{Madrid}
+\setbeamertemplate{footline}[page number]{}
+\beamertemplatenavigationsymbolsempty
+\usepackage{bxexpl3ptex}
+\usepackage{media9}
+\usepackage{mypresentation}
+\usepackage{fvextra}
+\usepackage{annot}
+\usepackage{lucidabr}
+%\AtBeginShipoutFirst{\special{pdf:tounicode EUC-UCS2}}
+\usepackage{shapepar}
+\usepackage{tikz}
+\usepackage{tcolorbox}
+\usetikzlibrary{arrows}
+\usetikzlibrary{shapes.callouts}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{positioning}
+
+\usepackage[noalphabet]{pxchfon}
+\input{jpncolor}
+
+\setgothicfont{migmix-2p-bold.ttf}
+%\setgothicfont{YasashisaBold.ttf}
+%\setminchofont{migmix-2p-bold.ttf} % 本文
+\mathversion{bold}
+
+\setbeamerfont{title}{size=\HUGE{28}{34},family={\yasagoth}}
+\setbeamerfont{frametitle}{size=\HUGE{20}{28},series={\yasagoth}}
+\setbeamerfont{frametext}{size=\HUGE{17}{24},series={\yasagoth}}
+\setbeamertemplate{frametitle}[default][left]
+\usefonttheme{professionalfonts}
+
+\setbeamercolor{background}{bg=white}
+\setbeamercolor{author}{fg=black}
+\setbeamercolor{date}{fg=black}
+\setbeamercolor{title}{fg=white, bg=kachi}
+\setbeamercolor{frametitle}{fg=white}
+\setbeamercolor{normal text}{fg=black}
+\setbeamerfont{normal text}{family=\rmfamily, series=\bfseries}
+\setbeamercolor{structure}{fg=black}
+
+\makeatletter
+\define@key{beamerframe}{t}[true]{% top
+  \beamer@frametopskip=.2cm plus .5\paperheight\relax%
+  \beamer@framebottomskip=0pt plus 1fill\relax%
+  \beamer@frametopskipautobreak=\beamer@frametopskip\relax%
+  \beamer@framebottomskipautobreak=\beamer@framebottomskip\relax%
+  \def\beamer@initfirstlineunskip{}%
+}
+\def\header#1{\vskip.5\baselineskip{\large\sffamily #1}}
+\tikzset{
+  notice/.style  = { fill=shozyohi, white, 
+                     rectangle callout, 
+                     rounded corners,
+                     callout absolute pointer={#1} }
+}
+\makeatother
+
+\setlength{\leftmargini}{12pt}
+\setlength{\leftmarginii}{12pt}
+
+\edef\0{\string\0}
+\DeclareTextCommand{\CarriageReturn}{JY2}{\015}
+
+\title{脚注をめぐる冒険}
+\author{\sffamily 鹿野 桂一郎\\
+\bfseries ラムダノート株式会社\\
+\small\bfseries \email{k16.shikano@lambdanote.com} \\ 
+\twitter{golden\_lucky} 
+}
+\date{\sffamily\footnotesize 2016年11月5日\\ 於\, TeXユーザーの集い2016}
+
+\begin{document}
+\fontseries{ub}\selectfont
+
+%{\usebackgroundtemplate{\includegraphics[height=1.1\paperheight]{skyrocket.jpg}}%
+\frame{\titlepage}
+%}
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=kyara!15]
+\setbeamercolor{frametitle}{bg=kyara, fg=white}
+\setbeamercolor{structure}{fg=kyara}
+
+\begin{frame}[plain]
+\setlength{\textwidth}{115mm}
+    \HUGE{13}{14}\color{kachi}\yasagoth
+  \begin{columns}[t]
+    \begin{column}{.2\textwidth}
+    \end{column}
+    \begin{column}{.6\textwidth}
+諸君　私は注釈が好きだ\\
+諸君　私は注釈が好きだ\\
+諸君　私は注釈が大好きだ\\
+\vskip\baselineskip
+割注が好きだ\\
+後注が好きだ\\
+傍注が好きだ\\
+側注が好きだ\\
+脚注が好きだ\\
+アノテーションが好きだ\\
+\vskip\baselineskip
+本文で　付録で\\
+ページ上部で　ページ下部で\\
+\vskip\baselineskip
+本という媒体で行われる\\
+ありとあらゆる注釈表現が大好きだ
+    \end{column}
+    \begin{column}{.2\textwidth}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=kachi!15]
+\setbeamercolor{frametitle}{bg=kachi, fg=white}
+\setbeamercolor{structure}{fg=kachi}
+
+\begin{frame}[plain]
+  \begin{center}
+    \HUGE{34}{34}\color{kachi}\yasagoth
+    脚注の話です
+  \end{center}
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue ものすごく長い脚注を入れたい}
+  \sffamily
+  \begin{itemize}
+    \item ``The Annotated Alice''
+    \begin{itemize}
+      \item Lewis Carroll and {\color{shozyohi}Martin Gardner}
+      \item  『不思議の国のアリス』（石川澄子訳、東京図書、1980）
+    \end{itemize}
+  \end{itemize}
+  \begin{center}
+    \includegraphics[width=.35\textwidth]{cover.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue 分注ってレベルじゃない}
+  \sffamily
+  \begin{center}
+    \includegraphics[width=.4\textwidth]{alice0.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue 分注ってレベルじゃない}
+  \sffamily
+  \begin{center}
+    \includegraphics[width=.8\textwidth]{alice1.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue 分注ってレベルじゃない}
+  \sffamily
+  \begin{center}
+    \includegraphics[width=.8\textwidth]{alice2.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue とりあえずup\LaTeX で組んでみよう}
+  \sffamily
+  \begin{itemize}
+    \item jsbookのデフォルトが\texttt{\bslash dimen\bslash footins=8in}なので最初のページの本文が一行だけに
+  \end{itemize}
+  \begin{center}
+    \includegraphics[width=.4\textwidth]{defalt-footins.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue \texttt{\bslash footins}を変更したら？}
+  \sffamily
+  \begin{itemize}
+    \item \texttt{\bslash dimen\bslash footins=1in}するといい感じ？
+  \end{itemize}
+  \begin{center}
+    \includegraphics[width=.4\textwidth]{footins-one-inch-0.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue \texttt{\bslash footins}を変更したら？}
+  \sffamily
+  \begin{itemize}
+    \item \texttt{\bslash dimen\bslash footins=1in}だと3～18ページが悲惨
+  \end{itemize}
+  \begin{center}
+    \includegraphics[width=\textwidth]{footins-one-inch-1.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue ちょっと細工をすればなんとかなるけど}
+  \sffamily
+  \begin{center}
+    \includegraphics[width=.9\textwidth]{alice-annotated-pagebreak-0.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue ちょっと細工をすればなんとかなるけど}
+  \sffamily
+  \begin{center}
+    \includegraphics[width=.9\textwidth]{alice-annotated-pagebreak-1.png}
+  \end{center}
+\end{frame}
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=yamabuki!15]
+\setbeamercolor{frametitle}{bg=yamabuki, fg=black}
+\setbeamercolor{structure}{fg=yamabuki}
+
+\begin{frame}[plain]
+  \begin{center}
+    \HUGE{34}{34}\color{black}\yasagoth
+    脚注にこだわらず、\\
+    後注にする手はあるけど、\\
+    本文の近くで見たい！
+  \end{center}
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue Kindleにはポップアップ脚注がある！}
+  \sffamily
+  \begin{center}
+    \includemedia[width=.9\textwidth, height=.6\textwidth, activate=pageopen,
+    addresource=kindle-footnote.mp4, flashvars={source=kindle-footnote.mp4}]{}{VPlayer.swf}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]{\inhibitglue Kindleでポップアップ脚注するには}
+  \sffamily
+  \begin{itemize}
+    \item \texttt{<mbp:pagebreak/>}というKindle専用のカスタムHTMLタグを、参照元へのバックリンクを含むブロックの前に付ければ、リーダーが脚注とみなしてくれるという仕組み
+  \end{itemize}
+  \begin{tcolorbox}[sharp corners]
+  \HUGE{11}{11}
+  \begin{Verbatim}[commandchars=\\\{\}, breaklines=true, breakanywhere=true]
+    <p>今日は悪天候ですね
+      <a name="ntf1"></a>
+      <a href="\#ftn1">†1</a>。
+    </p>
+    
+    {\color{shozyohi}<mbp:pagebreak/>}
+    <div id="ftn1">
+      脚注†1 だってTeXユーザーの集いですよ？<br/>
+      {\color{shozyohi}<a href="\#ntf1">もどる</a>}
+    </div>
+  \end{Verbatim}
+  \end{tcolorbox}
+\end{frame}
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=miru!15]
+\setbeamercolor{frametitle}{bg=miru, fg=white}
+\setbeamercolor{structure}{fg=miru}
+
+\begin{frame}[plain]
+  \begin{center}
+    \HUGE{34}{34}\color{miru}\yasagoth
+    ポップアップなら\\
+    PDFでも\\
+    できるじゃないか！
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]{\inhibitglue PDFでポップアップ脚注}
+  \sffamily
+  \begin{itemize}
+    \item \texttt{\bslash special\{pdf:ann ...\}}にPDFの辞書オブジェクトをごりごり書けばよい\annot{脚注がポップアップされる！}。
+  \end{itemize}
+  \begin{tcolorbox}[sharp corners]
+  \HUGE{10}{11}
+  \begin{Verbatim}[commandchars=\\\{\}, breaklines=true, breakanywhere=true]
+\bslash{}newcommand\{\bslash{}annot\}[1]\{%
+  \bslash{}special\{pdf:tounicode UTF8-UCS2\}%
+  \bslash{}special\{pdf: ann width 0pt height 0pt
+  << /Type /Annot /Subtype /Caret 
+     /RD [5 0 3 -5] 
+     /Close true /C [0.9 0.1 0.1]
+  /Contents (\#1) >>\}\}
+  \end{Verbatim}
+  \end{tcolorbox}
+\end{frame}
+
+\begin{frame}[fragile]{\inhibitglue PDFアノテーションの改行}
+  \sffamily
+  \begin{itemize}
+    \item PDFのオブジェクトに入れられるテキストはベタのみで、改行はCarriage Return。
+    \item TeXをごまかしてCarriage Returnを入れるトリックが必要\annot{改\CarriageReturn 行\CarriageReturn も、\CarriageReturn\CarriageReturn 入れようと思えばいれられる}
+  \end{itemize}
+  \begin{tcolorbox}[sharp corners]
+  \HUGE{10}{11}
+  \begin{Verbatim}[commandchars=\\\{\}, breaklines=true, breakanywhere=true]
+\bslash{}edef\bslash{}0\{\bslash{}string\bslash{}0\}
+\bslash{}DeclareTextCommand\{\bslash{}CarriageReturn\}\{JY2\}\{\bslash{}015\}
+  \end{Verbatim}
+  \end{tcolorbox}
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue WTF？}
+  \sffamily
+  \begin{center}
+    \includegraphics[width=.9\textwidth]{alice-edcom.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]{\inhibitglue またdvipdfmxか！}
+  \sffamily
+  \begin{itemize}
+    \item UTF-16BEへの変換が介在するが、これのバッファが4096バイト{\color{shozyohi}しか}なく、それを越える文字がきてもエラーを出さずに警告を出すのみ。結果として文字化けPDFができる
+  \end{itemize}
+  \begin{tcolorbox}[sharp corners]
+  \HUGE{10}{11}
+  \begin{Verbatim}[commandchars=\\\{\}, breaklines=true, breakanywhere=true]
+static int
+reencodestring (CMap *cmap, pdf\_obj *instring)
+\{
+#define {\color{shozyohi}WBUF\_SIZE 4096}
+  unsigned char  wbuf[WBUF\_SIZE];
+  ...（以下略）
+    \end{Verbatim}
+  \end{tcolorbox}
+\end{frame}
+
+\begin{frame}[plain]
+  \begin{center}
+    \yasagoth
+    念のため補足しておくと、dvipdfmxが特にだめ\\
+    というわけではなく、Kindleにもポップアップ脚注\\
+    として認識される文字数に上限があるようです。\\
+    （実験によると5490バイト付近）
+  \end{center}
+\end{frame}
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=black!15]
+\setbeamercolor{frametitle}{bg=black, fg=white}
+\setbeamercolor{structure}{fg=black}
+
+\begin{frame}[plain]
+  \begin{center}
+    \HUGE{34}{34}\color{miru}\yasagoth
+    物理書籍で\\
+    ポップアップしたい！
+  \end{center}
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue 脚注AR{\footnotesize （Augmented Reality）}のご提案}
+  \sffamily
+  \begin{center}
+    \includemedia[width=.9\textwidth, height=.6\textwidth, activate=pageopen,
+    addresource=ar-footnote.mp4, flashvars={source=ar-footnote.mp4}]{}{VPlayer.swf}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]{\inhibitglue 脚注ARはソリューションか？}
+  \sffamily
+  \begin{itemize}
+    \item 本のページにマーカー、微妙ですよね\\
+      \begin{itemize}
+        \item そもそもダサい
+        \item 実用的にも、端末で認識できる大きさの上限が厳しそう
+        \item 版ズレがあると厳しそう
+      \end{itemize}
+    \item 端末にアプリをインストールしてもらわないとコンテンツが見えないなんて\\
+      \begin{itemize}
+        \item それなら電子書籍でいいのでは？
+      \end{itemize}
+    \item とはいえ、マーカーレスでコンテンツ情報はクラウドに管理という未来もありうる\\
+      \begin{itemize}
+        \item ネットワークに常時接続が前提になるけど
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue まとめ}
+  \sffamily
+  \begin{itemize}
+    \item 脚注は容量用法を守って正しく使いましょう
+    \item でもメタコンテンツは楽しいし、本の読み方を広げるので、いろいろ工夫できると楽しいですね \pause
+    \item ラムダノート株式会社は出版を中心として技術文書まわりのお手伝いをいろいろする会社です
+  \end{itemize}
+  \begin{center}
+    \includegraphics[width=.5\textwidth]{main-logo.pdf}
+  \end{center}
+\end{frame}
+
+\end{document}
