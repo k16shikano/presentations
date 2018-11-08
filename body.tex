@@ -1,0 +1,21 @@
+\documentclass[class=minimal,border=0pt,uplatex,dvipdfmx]{standalone}
+\usepackage{pgf,pgfarrows,pgfnodes}\usepgflibrary{patterns}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage[deluxe]{otf}\usepackage{lucidabr}
+\makeatletter
+\DeclareRobustCommand\rmfamily
+        {\not@math@alphabet\rmfamily\mathrm
+         \romanfamily\rmdefault\kanjifamily\mcdefault\selectfont}
+\DeclareRobustCommand\sffamily
+        {\not@math@alphabet\sffamily\mathsf
+         \romanfamily\sfdefault\kanjifamily\gtdefault\selectfont}
+\DeclareRobustCommand\ttfamily
+        {\not@math@alphabet\ttfamily\mathtt
+         \romanfamily\ttdefault\kanjifamily\gtdefault\selectfont}
+\makeatother
+\renewcommand{\bfseries}{\mathversion{bold}\fontseries{\bfdefault}\kanjiseries{bx}\selectfont}
+%\usepackage[whole]{bxcjkjatype}
+\begin{document}
+\input{image}
+\end{document}

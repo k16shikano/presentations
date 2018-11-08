@@ -1,0 +1,355 @@
+\documentclass[14pt,dvipdfmx,uplatex]{beamer}
+\usetheme{Madrid}
+\setbeamertemplate{footline}[page number]{}
+\beamertemplatenavigationsymbolsempty
+\usepackage{mypresentation}
+\usepackage{fvextra}
+\usepackage{lucidabr}
+\usepackage{hologo}
+%\AtBeginShipoutFirst{\special{pdf:tounicode EUC-UCS2}}
+%\usepackage{minted}
+\usepackage{tikz}
+\usepackage{tcolorbox}
+\usetikzlibrary{arrows}
+\usetikzlibrary{shapes}
+\usetikzlibrary{decorations}
+\usetikzlibrary{positioning}
+
+\usepackage[noalphabet]{pxchfon}
+\input{jpncolor}
+
+\setgothicfont{migmix-2p-bold.ttf}
+%\setgothicfont{YasashisaBold.ttf}
+%\setminchofont{migmix-2p-bold.ttf} % 本文
+\mathversion{bold}
+
+\setbeamerfont{title}{size=\HUGE{28}{34},family={\yasagoth}}
+\setbeamerfont{frametitle}{size=\HUGE{20}{28},series={\yasagoth}}
+\setbeamerfont{frametext}{size=\HUGE{20}{28},series={\yasagoth}}
+\setbeamertemplate{frametitle}[default][left]
+\usefonttheme{professionalfonts}
+
+\setbeamercolor{background}{bg=white}
+\setbeamercolor{author}{fg=black}
+\setbeamercolor{date}{fg=black}
+\setbeamercolor{title}{fg=white, bg=kachi}
+\setbeamercolor{frametitle}{fg=white}
+\setbeamercolor{normal text}{fg=black}
+\setbeamerfont{normal text}{family=\rmfamily, series=\bfseries}
+\setbeamercolor{structure}{fg=black}
+
+\makeatletter
+\define@key{beamerframe}{t}[true]{% top
+  \beamer@frametopskip=.2cm plus .5\paperheight\relax%
+  \beamer@framebottomskip=0pt plus 1fill\relax%
+  \beamer@frametopskipautobreak=\beamer@frametopskip\relax%
+  \beamer@framebottomskipautobreak=\beamer@framebottomskip\relax%
+  \def\beamer@initfirstlineunskip{}%
+}
+\def\header#1{\vskip.5\baselineskip{\large\sffamily #1}}
+\tikzset{
+  notice/.style  = { fill=shozyohi, white, 
+                     rectangle callout, 
+                     rounded corners,
+                     callout absolute pointer={#1} }
+}
+\makeatother
+
+\setlength{\leftmargini}{12pt}
+\setlength{\leftmarginii}{12pt}
+
+\edef\0{\string\0}
+\DeclareTextCommand{\CarriageReturn}{JY2}{\015}
+
+\title{2018年でもEPSを\TeX{}で使う}
+\author{\sffamily 鹿野 桂一郎\\
+\bfseries ラムダノート株式会社\\
+\small\bfseries \email{k16.shikano@lambdanote.com} \\ 
+\twitter{golden\_lucky} 
+}
+\date{\sffamily\footnotesize 2018年11月10日\\ 於\, TeXConf 2018}
+
+\begin{document}
+\fontseries{ub}\selectfont
+
+\frame{\titlepage}
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=kachi!15]
+\setbeamercolor{frametitle}{bg=kachi, fg=white}
+\setbeamercolor{structure}{fg=kachi}
+
+\begin{frame}[plain]
+  \begin{center}
+    \HUGE{28}{34}\color{kachi}\yasagoth
+    \begin{tikzpicture}
+    \node[text width=100mm,align=center]{\TeX{}では、画像を\textbf{EPS}で埋め込みます};
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}[plain]
+  \begin{center}
+    \HUGE{28}{34}\color{kachi}\yasagoth
+    \begin{tikzpicture}
+    \node[cross out,draw=red,ultra thick,text width=100mm,align=center]{\TeX{}では、画像を\textbf{EPS}で埋め込みます};
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue そもそもEPSとはなにか}
+  \sffamily
+  \begin{itemize}
+    \item Encapsulated {\color{red}PostScript}
+    \item PostScriptは、印刷のためのデバイスに依存しない、プログラミング言語
+    \item それだと実際の印刷に使いにくいので、{\color{red}DSC}という規約がある
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[t,fragile=singleslide]{\inhibitglue EPSはDSC準拠のデータ交換形式}
+  \sffamily
+  \begin{itemize}
+    \item Document Structuring Convention
+    \item アプリケーションに依存する情報とか、そのファイルがどういう構造になっているかとか、そういう情報を埋め込むときの決まりごと
+    \item 他のPostScriptファイルから取り込めるような単ページの絵としてのファイル形式を、DSCに従って決めたものが、{\color{red}EPS}
+  \end{itemize}
+  \fontsize{7pt}{7pt}\selectfont
+  \begin{tcolorbox}
+  \begin{Verbatim}[commandchars=\\\{\},mathescape]
+%!PS-Adobe-3.1 EPSF-3.0
+ \rotatebox{90}{$\cdots$}
+%%BoundingBox: 0 0 300 100
+  \end{Verbatim}
+  \end{tcolorbox}
+\end{frame}
+
+\begin{frame}[t,fragile=singleslide]{\inhibitglue \TeX{}はEPSを選んだ}
+  \sffamily
+  \begin{itemize}
+    \item おそらく、ほかの選択肢が事実上なかった
+      \begin{itemize}
+        \item Plain \TeX{}の\texttt{epsf.sty}マクロはクヌースの手がかかっている
+      \end{itemize}
+    \item ただし、\TeX{}そのものはPostScriptを「完全には」処理できない
+      \begin{itemize}
+        \item DVIにおける外部画像の扱いは、「\texttt{special}を使って後段のデバイスに丸投げ」が基本
+        \item pdf\TeX{}では、EPSは非サポート
+     \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[t,fragile=singleslide]{\inhibitglue Ghostscript}
+  \sffamily
+  \begin{enumerate}
+    \item \TeX{}エンジンが画像処理のたびに呼び出す
+    \item DVIウェアが画像処理のたびに呼び出す
+    \item だったら最初から画像をすべてPDFに変換して、それをpdf\TeX{}や\texttt{dvipdfmx}が直接PDFに埋め込めるようにすべき、というのが最近の潮流
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}[t,fragile=singleslide]{\inhibitglue Ghostscript}
+  \sffamily
+  \begin{enumerate}
+    \item \TeX{}エンジンが画像処理のたびに呼び出す
+    \item DVIウェアが画像処理のたびに呼び出す
+    \item だったら最初から画像をすべてPDFに変換して、それをpdf\TeX{}や\texttt{dvipdfmx}が直接PDFに埋め込めるようにすべき、というのが最近の潮流
+  \end{enumerate}
+  
+  \HUGE{21}{28}\color{black}\yasagoth
+  \begin{center}
+  「\TeX{}はGhostscriptから離れては生きていけないのよ」
+  \end{center}
+\end{frame}
+
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=yamabuki!15]
+\setbeamercolor{frametitle}{bg=yamabuki, fg=black}
+\setbeamercolor{structure}{fg=yamabuki}
+
+\begin{frame}[plain]
+  \begin{center}
+    \HUGE{28}{34}\color{black}\yasagoth
+    EPSは、いまやほんとうにいらない子なのだろうか？
+  \end{center}
+\end{frame}
+
+\begin{frame}[t,fragile=singleslide]{\inhibitglue それでもEPSを使いたいこともある}
+  \sffamily
+  \begin{itemize}
+    \item EPSファイルをもらったけどAdobe Illustratorで開いたら微妙な状況になった
+    \item 画像をテキスト形式でバージョン管理したい
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[plain]
+  \begin{center}
+    \HUGE{28}{34}\color{black}\yasagoth
+    \TeX{}（広義）だけでPostScriptを処理できればいいのに……
+  \end{center}
+\end{frame}
+
+\begin{frame}[t,fragile=singleslide]{\inhibitglue \hologo{METAPOST}由来のEPS}
+  \sffamily
+  \begin{itemize}
+    \item \hologo{METAPOST}のEPS出力は、複雑なPostScriptコードを含まない（\textit{purified EPS}）
+    \item \underline{\TeX{}のエコシステムだけで処理できる}、{\color{red}良いEPS}
+    \begin{itemize}
+      \item pdf\TeX{}とLua\TeX{}は、EPSなら自分で処理する！
+      \item dvipdfmxも、\hologo{METAPOST}を処理できる！
+      \item いずれも\texttt{.mps}という拡張子にする必要あり
+      \item dvipdfmxには、\texttt{.mps}を直接PDFにする\texttt{-M}オプションもある
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[t,fragile=singleslide]{\inhibitglue EPSをpurifyする}
+  \sffamily
+  \begin{itemize}
+    \item その名も\texttt{purifyeps}
+    \item \texttt{pstoedit}で\hologo{METAPOST}のソースに変換し、その結果を\texttt{mpost}にかけるだけのPerlスクリプト
+    \begin{itemize}
+      \item もとのEPSのPostScriptは、前段の\texttt{pstoedit}が解釈してくれる
+      \item 後段の\texttt{mpost}で使うフォントマップを\texttt{pstoedit}に指定してくれる
+      \item \hologo{METAPOST}が知っているフォント名を適当に当てはめてあげる必要がある
+    \end{itemize}
+  \end{itemize}
+  \begin{center}
+  \resizebox{100mm}{!}{\input{figures/eps-mps}}
+  \end{center}
+\end{frame}
+
+\begin{frame}[t,fragile=singleslide]{\inhibitglue \texttt{pstoedit}がすごい}
+  \sffamily
+  \begin{itemize}
+    \item PDFやEPSを、さまざまな画像ファイルに変換してしまう、グラフィックス界のpandoc
+    \begin{itemize}
+      \item 実はGhostscriptのラッパー
+      \item Ghostscript本体では非推奨になった\texttt{DELAYBIND}がデフォルトで有効という罠がある
+      \item 結果として、イラレなどで生成されたEPSの多くは、素の\texttt{pstoedit}（したがって\texttt{purifyeps}）で変換しようとすると意味不明なPostScriptエラーになる
+      \item \texttt{DELAYBIND}を無効にするには、\texttt{purifyeps}のソースで\texttt{pstoedit}を呼んでいる部分で、\texttt{-nb}オプションを指定しなければならない
+    \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}[t,fragile=singleslide]{\inhibitglue \texttt{pstoedit}がすごい}
+  \sffamily
+  \begin{itemize}
+    \item PDFやEPSを、さまざまな画像ファイルに変換してしまう、グラフィックス界のpandoc
+    \begin{itemize}
+      \item 実はGhostscriptのラッパー
+      \item Ghostscript本体では非推奨になった\texttt{DELAYBIND}がデフォルトで有効という罠がある
+      \item 結果として、イラレなどで生成されたEPSの多くは、素の\texttt{pstoedit}（したがって\texttt{purifyeps}）で変換しようとすると意味不明なPSエラーになる
+      \item \texttt{DELAYBIND}を無効にするには、\texttt{purifyeps}のソースで\texttt{pstoedit}を呼んでいる部分で、\texttt{-nb}オプションを指定しなければならない
+    \end{itemize}
+  \end{itemize}
+
+  \HUGE{21}{28}\color{black}\yasagoth
+  \begin{center}
+  「\TeX{}はGhostscriptから(ry
+  \end{center}
+\end{frame}
+
+\begin{frame}[t,fragile=singleslide]{\inhibitglue ここまできたら……}
+  \sffamily
+  \begin{itemize}
+    \item purified EPSをネイティブの\TeX{}ソースに変換できないか？
+    \item TikZのインタフェースではPostScriptのシンタックスと違いすぎる
+    \item それなら{\color{red}PGF}
+    \begin{itemize}
+      \item いまではドキュメントでもTikZと同じインタフェースのように扱われているが、PGF独自のインタフェースはかなりPostScriptっぽい
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[t,fragile=singleslide]{\inhibitglue \texttt{Eps2pgf}}
+  \sffamily
+  \begin{itemize}
+    \item すでにあった
+    \item PostScript処理系ではなく、\hologo{METAPOST}の出力したEPSからPGFへのコンバーター
+    \begin{itemize}
+      \item Java製でメンテもされてなさそう
+      \item Sourceforgeにポストされているがソースがない
+    \end{itemize}
+    \item 不安材料はあるけど、とにかく動く
+  \end{itemize}
+  \fontsize{7pt}{7pt}\selectfont
+  \begin{tcolorbox}
+  \begin{Verbatim}[commandchars=\\\{\}]
+$ java -jar eps2pgf.jar image.eps -o image.tex
+  \end{Verbatim}
+  \end{tcolorbox}
+  \begin{center}
+  \resizebox{100mm}{!}{\input{figures/eps-pgf}}
+  \end{center}
+
+\end{frame}
+
+\begin{frame}[t,fragile=singleslide]{\inhibitglue EPSを\TeX{}として使う}
+  \sffamily
+  \begin{itemize}
+      \item 本文と図のフォントが当然のように一致する。画期的
+      \item もちろんテキストなのでバージョン管理も簡単
+      \item 座標で位置あわせを数値指定できる
+      \item 複数の画像ファイルでパーツを一気に差し替える、みたいなことも可能
+      \begin{itemize}\item パーツだけをPGF内で\texttt{\bslash{}includegraphics}すればいい\end{itemize}
+      \item \TeX{}にした図中では、日本語もまともな組版で使える
+      \begin{itemize}\item 元のEPSを日本語で作ってしまうと\texttt{pstoedit}によってアウトライン化されてしまうけど\end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue まとめ}
+  \sffamily
+  \begin{itemize}
+    \item このスライドはすべて\texttt{.tex}だけで作られています
+    \item \TeX{}はGhostscriptから離れては生きていけない
+    \item \hologo{METAPOST}は福音かも
+    \item ラムダノート株式会社は出版を中心として技術文書まわりのお手伝いをいろいろする会社です
+    \begin{itemize}
+      \item \url{https://lambdanote.com}
+    \end{itemize}
+  \end{itemize}
+  \begin{center}
+  \resizebox{.5\textwidth}{!}{\input{figures/main-logo}}
+  \end{center}
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue 参考資料}
+  \sffamily
+  \fontsize{9pt}{9pt}\selectfont
+
+  \begin{itemize}
+    \item ``The epsf package'', \url{http://tug.ctan.org/macros/generic/epsf/epsf-doc.pdf} \\
+    Plain \TeX{}でEPSを取り込むのに使われるepsfパッケージのマニュアル。クヌースの関与もわかる。
+    \item ``The Dvipdfmx User’s Manual'' \url{http://www.tug.org/texlive//devsrc/Master/texmf-dist/doc/dvipdfmx/dvipdfmx.pdf}\\
+     dvipdfmxのマニュアル。dvipdfmxにおける画像の扱いの考え方がわかる。
+    \item ``The pdfTEX user manual'', \url{http://texdoc.net/texmf-dist/doc/pdftex/manual/pdftex-a.pdf}\\
+     pdf\TeX{}のマニュアル。pdf\TeX{}における画像の扱いの考え方がわかる。Heiko Oberdiek氏によるepstopdfパッケージのドキュメントもよい資料（``The epstopdf package'', \url{http://mirrors.ctan.org/macros/latex/contrib/oberdiek/epstopdf.pdf} ）。
+    \item ``METAPOST, a user's manual'', \url{https://www.tug.org/docs/metapost/mpman.pdf} \\
+    \hologo{METAPOST}のマニュアル
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue 参考資料（つづき）}
+  \sffamily
+  \fontsize{9pt}{9pt}\selectfont
+
+  \begin{itemize}
+    \item ``Ghostscript and the PostScript Language'', \url{https://www.ghostscript.com/doc/9.20/Language.htm}\\
+     PostScriptの\texttt{bind}をGhostscriptでは\texttt{.bind}として再定義していました、ということが書いてある。
+    \item ``PS interpreter - remove superexec from systemdict'', \url{http://git.ghostscript.com/?p=ghostpdl.git;a=commitdiff;h=8556b698892e4706aa0b9d996bec82fed645eaa5}\\
+    \texttt{DELAYBIND}は、PostScriptの\texttt{bind}コマンドの動作をちょっと変えることで、標準ライブラリのコマンド名を上書きしているようなpsファイルを扱えるようにするためのGhostscript独自の仕掛け。Adobe Distillerが隠し持っている\texttt{internaldict}辞書を操作する\texttt{superexec}というコマンドが\texttt{systemdict}にあったのを取り除いたときに、副作用があるので除去された。そのときのコミット。
+    \item ``PostScript Language Reference Manual''\\
+    第2版がアドビシステムズジャパン監訳で翻訳されている。幸い、DSCとEPSについては第3版より第2版のほうがわかりやすい。
+    \item ``Eps2pgf'' \url{https://sourceforge.net/projects/eps2pgf/}\\
+    SourceForgeのEps2pgfの配布サイト。
+    \item ``User's Guide to the PGF Package, Version 0.61'' \url{https://www.tuteurs.ens.fr/noncvs/docs/pgf/pgfuserguide.pdf}\\
+    2004年ころのPGF（非TikZ）のマニュアル（全25ページ！）。
+  \end{itemize}
+
+\end{frame}
+
+%\bibliographystyle{alpha}
+%\bibliography{void}
+
+\end{document}
