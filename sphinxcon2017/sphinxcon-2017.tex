@@ -1,0 +1,686 @@
+\documentclass[14pt,dvipdfmx,uplatex]{beamer}
+\usetheme{Madrid}
+\usepackage{pxjahyper}
+\setbeamertemplate{footline}[page number]{}
+\setbeamercovered{transparent=35}
+\beamertemplatenavigationsymbolsempty
+\usepackage{mypresentation}
+\usepackage{minted}
+\usepackage{fvextra}
+\usepackage{lucidabr}
+\usepackage{multicol}
+%\AtBeginShipoutFirst{\special{pdf:tounicode EUC-UCS2}}
+\usepackage{tikz}
+\usepackage[breakable, skins]{tcolorbox}
+\usetikzlibrary{arrows}
+\usetikzlibrary{shapes.callouts}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{positioning}
+
+\usepackage[noalphabet]{pxchfon}
+\input{jpncolor}
+
+\setgothicfont{migmix-2p-bold.ttf}
+%\setgothicfont{YasashisaBold.ttf}
+%\setminchofont{migmix-2p-bold.ttf} % 本文
+\mathversion{bold}
+
+\setbeamerfont{title}{size=\HUGE{28}{34},family={\yasagoth}}
+\setbeamerfont{frametitle}{size=\HUGE{20}{28},series={\yasagoth}}
+\setbeamerfont{frametext}{size=\HUGE{20}{28},series={\yasagoth}}
+\setbeamertemplate{frametitle}[default][left]
+\usefonttheme{professionalfonts}
+
+\setbeamercolor{background}{bg=white}
+\setbeamercolor{author}{fg=black}
+\setbeamercolor{date}{fg=black}
+\setbeamercolor{title}{fg=white, bg=kachi}
+\setbeamercolor{frametitle}{fg=white}
+\setbeamercolor{normal text}{fg=black}
+\setbeamerfont{normal text}{family=\rmfamily, series=\bfseries}
+\setbeamercolor{structure}{fg=black}
+
+\makeatletter
+\define@key{beamerframe}{t}[true]{% top
+  \beamer@frametopskip=.2cm plus .5\paperheight\relax%
+  \beamer@framebottomskip=0pt plus 1fill\relax%
+  \beamer@frametopskipautobreak=\beamer@frametopskip\relax%
+  \beamer@framebottomskipautobreak=\beamer@framebottomskip\relax%
+  \def\beamer@initfirstlineunskip{}%
+}
+\def\header#1{\vskip.5\baselineskip{\large\sffamily #1}}
+\tikzset{
+  notice/.style  = { fill=shozyohi, white, 
+                     rectangle callout, 
+                     rounded corners,
+                     callout absolute pointer={#1} }
+}
+\makeatother
+
+\setlength{\leftmargini}{12pt}
+\setlength{\leftmarginii}{12pt}
+
+\edef\0{\string\0}
+\DeclareTextCommand{\CarriageReturn}{JY2}{\015}
+
+\title{Sphinxで売り物の書籍を作ってみた}
+\author{\sffamily 鹿野 桂一郎\\
+\bfseries ラムダノート株式会社\\
+\small\bfseries \email{k16.shikano@lambdanote.com} \\ 
+\twitter{golden\_lucky} 
+}
+\date{\sffamily\footnotesize 2017年11月28日\\ 於\, SphinxCon 2017}
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=kachi!15]
+\setbeamercolor{frametitle}{bg=kachi, fg=white}
+\setbeamercolor{structure}{fg=kachi}
+
+\begin{document}
+\fontseries{ub}\selectfont
+
+%{\usebackgroundtemplate{\includegraphics[height=1.1\paperheight]{skyrocket.jpg}}%
+\frame{\titlepage}
+%}
+
+\begin{frame}[t]{\inhibitglue 出版社経営、趣味ドキュメントシステム}
+  \sffamily
+    \begin{itemize}
+      \item SphinxCon2015で基調講演しました 
+        \begin{itemize}\footnotesize
+          \item 「ドキュメントシステムはこれを使え\ 2015年版」 \url{https://www.slideshare.net/k16shikano/2015-55455604}
+        \end{itemize}
+      \item ドキュメントシステム好きはだいたい友だち
+      \item Re:VIEWで売り物の本を作ったことはある
+        \begin{itemize}\footnotesize
+          \item 「Re:VIEWで売り物の本を作ってみた（InDesign抜き）」 \url{http://note.golden-lucky.net/2015/06/reviewindesign.html}
+        \end{itemize}
+      \item でも、Sphinxで本を作ったことはなかった
+    \end{itemize}
+\end{frame}
+
+\begingroup
+\setbeamertemplate{background canvas}[default]
+\setbeamercolor{background canvas}{bg=black}
+\setbeamercolor{structure}{fg=white}
+\begin{frame}[plain]
+  \begin{columns}
+    \begin{column}{.45\paperwidth}
+      \includegraphics[width=\textwidth]{figures/progo.jpg}
+    \end{column}
+    \begin{column}{.5\paperwidth}
+      \hspace*{2ex}[
+      \vbox {\raggedright\sffamily\HUGE{12}{20}\vfill\color{white}%
+      reStructuredTextでHTMLの記事が執筆されていたので、そのままSphinxでLaTeXを生成して、印刷製本用のデータを制作した
+      }
+      \vfill
+      \vspace*{3\baselineskip}
+      \hspace*{2ex}
+      \vbox{\raggedright\HUGE{10}{12}\vfill\color{white}%
+        渋川よしき 著\\
+        A5判／360頁／本体3200円\\
+        ISBN：978-4-908686-03-0\\
+      }
+    \end{column}
+  \end{columns}
+\end{frame}
+\endgroup
+
+
+\begin{frame}[t]{\inhibitglue Sphinxの\texttt{make latexpdf}でPDFを生成してません}
+  \sffamily
+    \begin{itemize}
+    \item Sphinxディレクトリ下のreST原稿は、HTMLなどの生成には影響を与えず、そのままの形で完全に活用したい
+   \item でも、PDFはSphinxで作りたくない。なぜなら、
+    \begin{itemize}
+      \item われわれは\TeX にはちょっと詳しいので
+      \item 図はJPGやPNGではなくPDFを埋め込みたい
+      \item クラスファイルやスタイルファイルは自前のものを使いたい（後述）
+      \end{itemize}
+    \item \LaTeX 制作環境下で\texttt{make}すると、
+          Sphinxディレクトリ下で\texttt{make latex}して\texttt{.tex}を生成し、
+          自前のルーチンでPDFが生成される、というフローを採用
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue 必要だったハック}
+  \sffamily
+    \begin{itemize}
+      \item 1. デフォルトの\LaTeX テンプレートは使いづらい
+      \item 2. 自作の\LaTeX スタイルで見た目を変えたい
+      \item 3. ブロック要素内の脚注を特別扱いしたくない
+      \item 4. 書籍の相互参照 ≠ ハイパーリンク
+      \item 5. 整形の自由度が高い表が必要
+    \end{itemize}
+\end{frame}
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=yamabuki!70]
+\setbeamercolor{frametitle}{bg=yamabuki, fg=black}
+\setbeamercolor{structure}{fg=yamabuki}
+
+\begin{frame}[t]{\inhibitglue 必要だったハック}
+  \sffamily
+    \begin{itemize}
+      \onslide<1> \item 1. デフォルトの\LaTeX テンプレートは使いづらい
+      \onslide<0> \item 2. 自作の\LaTeX スタイルで見た目を変えたい
+      \onslide<0> \item 3. ブロック要素内の脚注を特別扱いしたくない
+      \onslide<0> \item 4. 書籍の相互参照 ≠ ハイパーリンク
+      \onslide<0> \item 5. 整形の自由度が高い表が必要
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[t,fragile=singleslide]{\inhibitglue 専用ドキュメントクラスを使いたい、\\ デフォルトのパッケージは使いたくない}
+  \sffamily
+  \begin{itemize}
+  \item \texttt{\_template/latex.tex\_t}として、カスタマイズのテンプレートを設定することで解決できた
+  \end{itemize}
+
+  \fontsize{7.5pt}{7pt}\selectfont
+  \begin{tcolorbox}
+  \begin{minted}{latex}
+\documentclass[a5,dvipdfmx,uplatex]{lnbook}
+
+\usepackage{sphinx}
+\usepackage{progo}
+\AtBeginShipoutFirst{\special{pdf:tounicode UTF8-UTF16}}
+<%= makeindex %>
+\pagestyle{bookheadings}
+\usepackage{hyperref}
+
+<%= body %>
+<%= atendofbody %>
+<%= indices %>
+<%= printindex %>
+\include{okuduke}
+
+\end{document}
+\end{minted}
+\end{tcolorbox}
+
+\end{frame}
+
+\begin{frame}[t,fragile=singleslide]{\leavevmode\inhibitglue 「章」以外の構成要素を追加したり、\\ 構成要素の順番を変えたりしたい}
+  \sffamily
+  \begin{itemize}
+  \item 目次どころか \texttt{\bslash{}begin\{document\}}までもが \texttt{<\%= body \%>} の部分に埋め込まれてしまうので、こう書けない！
+  \end{itemize}
+  \fontsize{7.5pt}{7pt}\selectfont
+  \begin{tcolorbox}
+  \begin{minted}[highlightcolor=nanohana, highlightlines={3-8}]{latex}
+\documentclass[a5,dvipdfmx,uplatex]{lnbook}
+...
+%%% こう書きたい！（けど、書けない）
+%%% 
+%%% \begin{document}
+%%% \include{tobiraura}
+%%% \include{preface}
+%%% \tableofcontents
+
+<%= body %>
+<%= atendofbody %>
+<%= indices %>
+<%= printindex %>
+\include{okuduke}
+\end{document}
+\end{minted}
+\end{tcolorbox}
+
+\end{frame}
+
+\begin{frame}[t,fragile=singleslide]{\inhibitglue ディレクティブを追加しました}
+  \sffamily
+  \fontsize{7.5pt}{7pt}\selectfont
+  \begin{tcolorbox}
+  \begin{minted}{python}
+def frontmatter(name, arguments, options, content, lineno,
+                content_offset, block_text, state, state_machine):
+    return [nodes.raw(
+        '',
+        r"""
+\include{tobiraura}
+\frontmatter \setcounter{page}{3}
+""",
+        format='latex')]
+
+def mainmatter(name, arguments, options, content, lineno,
+               content_offset, block_text, state, state_machine):
+    return [nodes.raw(
+        '',
+        r"""
+\tableofcontents
+\mainmatter
+""",
+        format='latex')]
+
+def setup(app):
+    app.add_directive('frontmatter', frontmatter, 1, (0, 0, 0))
+    app.add_directive('mainmatter', mainmatter, 1, (0, 0, 0))
+
+  \end{minted}
+  \end{tcolorbox}
+
+\end{frame}
+
+\begin{frame}[t,fragile=singleslide]{\inhibitglue 自在に本を構成できるようになりました}
+  \sffamily
+
+  \fontsize{7pt}{7pt}\selectfont
+  \begin{multicols}{2}
+    \begin{tcolorbox}[enhanced jigsaw, breakable, break at=70mm]
+      \begin{minted}{rst}
+Goならわかるシステムプログラミング
+==================================
+
+.. only:: latex
+   
+   .. frontmatter::
+
+.. toctree::
+   :maxdepth: 2
+
+   preface
+
+.. only:: latex
+
+   .. mainmatter::
+
+.. toctree::
+   :maxdepth: 3
+   :numbered:
+
+   introduction
+   iowriter
+   :
+   :
+   container
+
+.. only:: latex
+
+   .. appendix::
+
+.. toctree::
+   :maxdepth: 3
+   :numbered:
+
+   appendix
+   appendix_c
+
+.. only:: latex
+
+   .. backmatter::
+
+.. toctree::
+
+   afterword
+    \end{minted}
+  \end{tcolorbox}
+
+\hfill 実際の\texttt{index.rst}のようす
+\end{multicols}
+
+\end{frame}
+
+
+\begin{frame}[t,fragile=singleslide]{\inhibitglue 「はじめに」を「第\, 0章」にしたくない}
+  \sffamily
+  \begin{itemize}
+  \item \texttt{\bslash{}chapter\{はじめに\}}になる見出しと、\texttt{\bslash{}chapter*\{はじめに\}}になる見出しとを、\\ \texttt{.rst}ファイル内で切り換えることは無理っぽい
+  \item しかたがないので、Sphinxが生成した\texttt{.tex}をスクリプトで後処理してから、up\LaTeX でPDF生成
+  \end{itemize}
+  \fontsize{8pt}{8pt}\selectfont
+  \begin{tcolorbox}
+    \begin{minted}{basemake}
+tex:
+    cd ../; make latex
+    cp ../_build/latex/Go.tex book.tex
+    gosh script/post-sphinx-latex.scm      
+    \end{minted}
+  \end{tcolorbox}
+  \hfill 実際のMakefileのようす
+    
+\end{frame}
+
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=matsuba!40]
+\setbeamercolor{frametitle}{bg=matsuba, fg=white}
+\setbeamercolor{structure}{fg=matsuba}
+
+\begin{frame}[t]{\inhibitglue 必要だったハック}
+  \sffamily
+    \begin{itemize}
+      \onslide<0> \item 1. デフォルトの\LaTeX テンプレートは使いづらい
+      \onslide<1> \item 2. 自作の\LaTeX スタイルで見た目を変えたい
+      \onslide<0> \item 3. ブロック要素内の脚注を特別扱いしたくない
+      \onslide<0> \item 4. 書籍の相互参照 ≠ ハイパーリンク
+      \onslide<0> \item 5. 整形の自由度が高い表が必要
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[t,fragile=singleslide]{\inhibitglue 例：コード片と実行画面を区別したい}
+  \sffamily
+  \begin{itemize}
+  \item \texttt{.. code-block::}ディレクティブは、\LaTeX{}の\texttt{sphinxVerbatim}環境内のコンテンツへと一律に変換される
+  \item つまり、PDFでの見た目をスタイルでスイッチできない
+    （HTMLでは\texttt{:class:}オプションで実現可能）
+  \end{itemize}
+
+  \begin{center}
+    \includegraphics[width=.5\textwidth]{figures/codeenv.jpg}
+  \end{center}
+
+\end{frame}
+
+\begin{frame}[t,fragile=singleslide]{\inhibitglue 好きな環境でラップできるようにしよう}
+  \sffamily
+  \begin{itemize}
+  \item \texttt{code-block}の改造はつらいので \TeX でカバー
+  \end{itemize}
+
+  \fontsize{7pt}{7pt}\selectfont
+  \begin{tcolorbox}
+  \begin{minted}{rest}
+.. customenv:: execquote
+
+   .. code-block:: sh
+   
+      # apt-get install strace ⏎
+  \end{minted}
+  \end{tcolorbox}
+  ↓ \texttt{make latex}
+  \begin{tcolorbox}
+  \begin{minted}[highlightcolor=nanohana, highlightlines={1,9}]{latex}
+\begin{customadmonition}{execquote}
+
+\def\sphinxLiteralBlockLabel{\label{\detokenize{systemcall:id66}}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} \color{white}apt\PYGZhy{}get install strace \crmark{}}
+\end{sphinxVerbatim}
+\let\sphinxVerbatimTitle\empty
+\let\sphinxLiteralBlockLabel\empty
+\end{customadmonition}
+  \end{minted}
+  \end{tcolorbox}
+\end{frame}
+
+
+\begin{frame}[t,fragile=singleslide]{\inhibitglue issueを出した}
+  \sffamily
+  \begin{itemize}
+  \item \texttt{.rst}内でこんな入れ子を書くのは筋悪
+  \item \LaTeX{}出力で\texttt{:class:}オプションの値が捨てられてるけど、この値を環境名にしてディレクティブの出力がラップされてくれれば、\texttt{.sty}でユーザがスタイルを指定できる
+    \begin{itemize}
+    \item HTML出力だと\texttt{<div>}の\texttt{class}値になるのでCSSでスタイル付けできる、という話と同じです
+    \end{itemize}
+  \item \leavevmode\inhibitglue 「LaTeX representation for :class: (of like `..code-block::` or `..note::`) \#4010」\\
+    \footnotesize\url{https://github.com/sphinx-doc/sphinx/issues/4010}
+  \end{itemize}
+
+\end{frame}
+
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=shozyohi!20]
+\setbeamercolor{frametitle}{bg=shozyohi, fg=white}
+\setbeamercolor{structure}{fg=shozyohi}
+
+\begin{frame}[t]{\inhibitglue 必要だったハック}
+  \sffamily
+    \begin{itemize}
+      \onslide<0> \item 1. デフォルトの\LaTeX テンプレートは使いづらい
+      \onslide<0> \item 2. 自作の\LaTeX スタイルで見た目を変えたい
+      \onslide<1> \item 3. ブロック要素内の脚注を特別扱いしたくない
+      \onslide<0> \item 4. 書籍の相互参照 ≠ ハイパーリンク
+      \onslide<0> \item 5. 整形の自由度が高い表が必要
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[t,fragile=singleslide]{\inhibitglue \LaTeX{}の脚注は透過的にうまく扱えない}
+  \sffamily
+  \begin{itemize}
+  \item Sphinxでも苦労のあとが見える（\texttt{footnotehyper-sphinx.sty}）
+  \item Sphinx提供のスタイル以外を使う場合、それが仇になる
+  \end{itemize}
+
+  \fontsize{7pt}{7pt}\selectfont
+  \begin{tcolorbox}
+  \begin{minted}{python}
+def visit_collected_footnote(self, node):
+    # type: (nodes.Node) -> None
+    self.in_footnote += 1
+    if 'footnotetext' in node:
+        self.body.append('%%\n\\begin{footnotetext}[%s]'
+                         '\\sphinxAtStartFootnote\n' % node['number'])
+    else:
+        if self.in_parsed_literal:
+            self.body.append('\\begin{footnote}[%s]' % node['number'])
+        else:
+            self.body.append('%%\n\\begin{footnote}[%s]' % node['number'])
+        self.body.append('\\sphinxAtStartFootnote\n')
+  \end{minted}
+  \end{tcolorbox}
+  \hfill \texttt{writers/latex.py} のようす
+\end{frame}
+
+\begin{frame}[t,fragile=singleslide]{\inhibitglue \TeX{}のふつうの脚注に戻しました}
+  \sffamily
+  \fontsize{8pt}{8pt}\selectfont
+  \begin{tcolorbox}
+  \begin{minted}{python}
+def visit_collected_footnote(self, node):
+    # type: (nodes.Node) -> None
+    self.in_footnote += 1
+    if 'footnotetext' in node:
+        self.body.append('\\footnotetext{')
+    else:
+        if self.in_parsed_literal:
+            self.body.append('\\footnote{')
+        else:
+            self.body.append('\\footnote{')
+
+def depart_collected_footnote(self, node):
+    # type: (nodes.Node) -> None
+    if 'footnotetext' in node:
+        self.body.append('}\\ignorespaces ')
+    else:
+        if self.in_parsed_literal:
+            self.body.append('}')
+        else:
+            self.body.append('}')
+    self.in_footnote -= 1
+
+  \end{minted}
+  \end{tcolorbox}
+\end{frame}
+
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=asagi!30]
+\setbeamercolor{frametitle}{bg=asagi, fg=black}
+\setbeamercolor{structure}{fg=asagi}
+
+\begin{frame}[t]{\inhibitglue 必要だったハック}
+  \sffamily
+    \begin{itemize}
+      \onslide<0> \item 1. デフォルトの\LaTeX テンプレートは使いづらい
+      \onslide<0> \item 2. 自作の\LaTeX スタイルで見た目を変えたい
+      \onslide<0> \item 3. ブロック要素内の脚注を特別扱いしたくない
+      \onslide<1> \item 4. 書籍の相互参照 ≠ ハイパーリンク
+      \onslide<0> \item 5. 整形の自由度が高い表が必要
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[t,fragile=singleslide]{\inhibitglue 人間が参照先を目で探すための文字列}
+  \sffamily
+  \begin{itemize}
+    \item \texttt{:doc:}や\texttt{:ref:}だと、章や節のタイトルしか出力しない
+    \item 人間が参照先にたどり着くためには、章や節の「番号」のほうが重要だったりする
+    \item かといって、\texttt{:numref:}を使うためにラベルを追加するのは面倒
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[t,fragile=singleslide]{\inhibitglue 独自に\texttt{:numdoc:}ロールを用意しました}
+  \fontsize{7pt}{7pt}\selectfont
+  \begin{tcolorbox}
+  \begin{minted}{python}
+def numdoc_role(name, rawtext, text, lineno, inliner, options={}, 
+                content=[]):
+    :
+    pnode = nodes.inline(rawtext, title, classes=['xref','doc'])
+    pnode['reftarget'] = target
+    return [pnode], []
+
+def visit_inline(self, node):
+    classes = node.get('classes', [])
+    if classes in [['menuselection'], ['guilabel']]:
+        :
+    elif classes in [['xref','doc']] and not self.in_title:
+        self.body.append(ur'第\DUrole{%s}{' % ','.join(classes))
+        self.context.append(u'}章')
+    elif classes and not self.in_title:
+        :
+  \end{minted}
+  \end{tcolorbox}
+
+  \sffamily\footnotesize
+  \begin{itemize}
+    \item いにしえの互換性を維持するための機能が\texttt{sphinx.sty}にあったので、それを利用できた
+  \end{itemize}
+
+  \fontsize{7pt}{7pt}\selectfont
+  \begin{tcolorbox}
+  \begin{minted}{latex}
+\expandafter\def\csname DUrole\detokenize{xref,doc}\expandafter\endcsname
+  \expandafter{\csname ref\endcsname}
+\providecommand*{\DUrole}[2]{%
+    :
+  \end{minted}
+  \end{tcolorbox}
+\end{frame}
+
+\begin{frame}[t,fragile=singleslide]{\inhibitglue 相互参照UIの落としどころ難しい}
+  \sffamily\small
+  \begin{itemize}
+    \item \texttt{:numdoc:}と\texttt{:doc:}を併記するのは、ちょっといけてない
+    \item \texttt{:numref:}と\texttt{:ref:}も併記するしかないし、まあいいかな
+    \item そもそも現在のSphinxでは参照アンカーをすべてSphinx側で事前に解決し、その結果を\texttt{\bslash{}hyperref}のオプション引数に埋め込んでしまう。でも、節番号の相互参照のような「\LaTeX{}が得意なこと」は、\LaTeX{}にやらせたい
+    \begin{itemize}
+      \item \LaTeX{}には採番機能があるけど、HTMLやEPUBに対応するには上位で採番機能が必要なんだよな
+      \item \LaTeX{}にしても、章や節のタイトル再利用は大変なので、どうがんばっても痒みは残りそうではある…
+    \end{itemize}
+    \item HTMLやEPUBでは無意味だけど、PDFでは\LaTeX{}の「ページ参照」が使いたい
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[t,fragile=singleslide]{\inhibitglue ページ参照といえば、索引}
+  \sffamily
+  \begin{itemize}
+    \item 索引のアンカーは、「項目が出現するセクション」ではなく、「項目が出現するページ」に必要
+    \item 必然的に、\texttt{.. index::}ディレクティブが使えない……
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[t,fragile]{\inhibitglue 独自に\texttt{:tex:}ロールを用意しました}
+  \setbeamercovered{invisible}
+  \fontsize{7pt}{7pt}\selectfont  
+  \begin{tcolorbox}
+  \begin{minted}{python}
+def tex_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
+    text = utils.unescape(text, restore_backslashes=True)
+    has_explicit, texsnipet, target = split_explicit_title(text)
+    pnode = nodes.raw(rawtext, texsnipet, format='latex')
+    return [pnode], []
+
+def setup(app):
+    app.add_role('tex', tex_role)
+  \end{minted}
+  \end{tcolorbox}
+
+  \sffamily\small
+  \begin{itemize}
+    \item 局所的な\TeX{}ソースの埋め込みによるスタイル指定にも使えて、やりたい放題！\pause
+    \item でも、原稿がこうなるの、いやですよね？
+  \end{itemize}
+
+  \fontsize{7pt}{7pt}\selectfont
+  \begin{tcolorbox}
+  \begin{Verbatim}[breaklines,breakanywhere,
+breakautoindent=false,
+breaksymbolindentleft=0pt,
+breaksymbolsepleft=0pt,
+breaksymbolindentright=0pt,
+breaksymbolsepright=0pt]
+物理的なストレージと対応しない、仮想的なファイルシステム\ :tex:`\index{ファイルシステム!仮想的な}`\ もあります。
+たとえば、Unix系のシステムにおける\ ``/proc``\ :tex:`\index{proc@\texttt{/proc}}`\ は仮想的なファイルシステムの一例です。
+  \end{Verbatim}
+  \end{tcolorbox}
+\end{frame}
+
+
+\begin{frame}[t,fragile=singleslide]{\inhibitglue 索引専用の\, Gitブランチを使う}
+  \sffamily
+  \begin{itemize}
+  \item 索引タグは、編集者だけが煩わされればよい
+  \item indexingブランチにmasterからcherry-pickしてmakeしたものを最終入稿データとする
+  \item 索引が組まれた\LaTeX{}用ファイルのみをmasterにコピーするという運用もありえる
+  \end{itemize}
+
+  \begin{center}
+    \includegraphics[width=.8\textwidth]{figures/indexing.pdf}
+  \end{center}
+  \fontsize{7pt}{7pt}\selectfont
+  \hfill \url{https://www.slideshare.net/k16shikano/imybp-light}より
+\end{frame}
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=hiwa!50]
+\setbeamercolor{frametitle}{bg=hiwa, fg=black}
+\setbeamercolor{structure}{fg=hiwa}
+
+\begin{frame}[t]{\inhibitglue 必要だったハック}
+  \sffamily
+    \begin{itemize}
+      \onslide<0> \item 1. デフォルトの\LaTeX テンプレートは使いづらい
+      \onslide<0> \item 2. 自作の\LaTeX スタイルで見た目を変えたい
+      \onslide<0> \item 3. ブロック要素内の脚注を特別扱いしたくない
+      \onslide<0> \item 4. 書籍の相互参照 ≠ ハイパーリンク
+      \onslide<1> \item 5. 整形の自由度が高い表が必要
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}[t]{\inhibitglue \LaTeX{}の表は自動できれいには組めない}
+  \setbeamercovered{invisible}
+  \sffamily
+  \begin{itemize}
+  \item Sphinxでは、表スタイルの自動解決を\LaTeX{}（tabularyパッケージ）にやらせる戦術
+  \item しかし、列幅や列のスタイルを\LaTeX{}側で完全に自動で「いい感じ」にするのは無理
+  \item そのため、個人的には、各セルを \texttt{\bslash{}multicolumn} 化して完全に独立制御する戦術をとっている
+  \item せめて colspec を\texttt{.rst}で指定できれば……
+  \end{itemize}
+\pause
+  \begin{center}
+    \includegraphics[width=.5\textwidth]{figures/tkomiya-tweet.png}
+  \end{center}
+  \fontsize{7pt}{7pt}\selectfont
+  \hfill \url{https://twitter.com/tk0miya/status/909614165852954627}
+
+\end{frame}
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=ginnezumi!20]
+\setbeamercolor{frametitle}{bg=ginnezumi, fg=white}
+\setbeamercolor{structure}{fg=ginnezumi}
+
+\begin{frame}[t]{\inhibitglue まとめ}
+  \setbeamercovered{invisible}
+  \sffamily
+  \begin{itemize}
+    \item Sphinxで困ったら日本語でツイートすればいい \pause
+    \item ある程度リッチな紙の本をテキストからmakeいっぱつで作るには、所与のフォーマットと拡張のための機能がSphinxくらい充実していても、手をかけないといけない部分がけっこうある
+    \item ラムダノート株式会社は出版を中心として技術文書まわりのお手伝いをいろいろする会社です
+    \begin{itemize}
+      \item \url{https://lambdanote.com}
+    \end{itemize}
+  \end{itemize}
+  \begin{center}
+    \includegraphics[width=.5\textwidth]{figures/main-logo.pdf}
+  \end{center}
+\end{frame}
+
+\end{document}
