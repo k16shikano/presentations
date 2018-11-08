@@ -1,0 +1,396 @@
+\documentclass[14pt,dvipdfmx,uplatex]{beamer}
+\usetheme{Madrid}
+\setbeamertemplate{footline}[page number]{}
+\beamertemplatenavigationsymbolsempty
+\usepackage{mypresentation}
+\usepackage{fvextra}
+\usepackage{lucidabr}
+%\AtBeginShipoutFirst{\special{pdf:tounicode EUC-UCS2}}
+\usepackage{tikz}
+\usepackage{tcolorbox}
+\usetikzlibrary{arrows}
+\usetikzlibrary{shapes.callouts}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{positioning}
+
+\usepackage[noalphabet]{pxchfon}
+\input{jpncolor}
+
+\setgothicfont{migmix-2p-bold.ttf}
+%\setgothicfont{YasashisaBold.ttf}
+%\setminchofont{migmix-2p-bold.ttf} % 本文
+\mathversion{bold}
+
+\setbeamerfont{title}{size=\HUGE{28}{34},family={\yasagoth}}
+\setbeamerfont{frametitle}{size=\HUGE{20}{28},series={\yasagoth}}
+\setbeamerfont{frametext}{size=\HUGE{20}{28},series={\yasagoth}}
+\setbeamertemplate{frametitle}[default][left]
+\usefonttheme{professionalfonts}
+
+\setbeamercolor{background}{bg=white}
+\setbeamercolor{author}{fg=black}
+\setbeamercolor{date}{fg=black}
+\setbeamercolor{title}{fg=white, bg=kachi}
+\setbeamercolor{frametitle}{fg=white}
+\setbeamercolor{normal text}{fg=black}
+\setbeamerfont{normal text}{family=\rmfamily, series=\bfseries}
+\setbeamercolor{structure}{fg=black}
+
+\makeatletter
+\define@key{beamerframe}{t}[true]{% top
+  \beamer@frametopskip=.2cm plus .5\paperheight\relax%
+  \beamer@framebottomskip=0pt plus 1fill\relax%
+  \beamer@frametopskipautobreak=\beamer@frametopskip\relax%
+  \beamer@framebottomskipautobreak=\beamer@framebottomskip\relax%
+  \def\beamer@initfirstlineunskip{}%
+}
+\def\header#1{\vskip.5\baselineskip{\large\sffamily #1}}
+\tikzset{
+  notice/.style  = { fill=shozyohi, white, 
+                     rectangle callout, 
+                     rounded corners,
+                     callout absolute pointer={#1} }
+}
+\makeatother
+
+\setlength{\leftmargini}{12pt}
+\setlength{\leftmarginii}{12pt}
+
+\edef\0{\string\0}
+\DeclareTextCommand{\CarriageReturn}{JY2}{\015}
+
+\title{\TeX は軽量マークアップの夢を見るか}
+\author{\sffamily 鹿野 桂一郎\\
+\bfseries ラムダノート株式会社\\
+\small\bfseries \email{k16.shikano@lambdanote.com} \\ 
+\twitter{golden\_lucky} 
+}
+\date{\sffamily\footnotesize 2017年10月14日\\ 於\, TeXConf 2017}
+
+\begin{document}
+\fontseries{ub}\selectfont
+
+%{\usebackgroundtemplate{\includegraphics[height=1.1\paperheight]{skyrocket.jpg}}%
+\frame{\titlepage}
+%}
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=kachi!15]
+\setbeamercolor{frametitle}{bg=kachi, fg=white}
+\setbeamercolor{structure}{fg=kachi}
+
+\begin{frame}[t]{\inhibitglue 軽量マークアップ記法と呼ばれるもの}
+  \sffamily
+    \begin{itemize}
+      \item Markdown(s)
+      \item reStructuredText
+      \item Wiki記法
+      \item AsciiDoc
+      \item Re:VIEW記法
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[plain]
+  \begin{center}
+    \HUGE{28}{34}\color{kachi}\yasagoth
+    なぜ
+    
+    \TeX は軽量マークアップの
+    
+    仲間に入れてもらえない？
+  \end{center}
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue 軽量マークアップの条件}
+  \sffamily
+  \begin{itemize}
+    \item \leavevmode\inhibitglue 「テキストエディター上で、なんとなく見た目を再現できる、装飾つきのテキスト」
+    \begin{itemize}
+      \item 注意：万国共通の定義ではない
+    \end{itemize}
+    \vskip\baselineskip 
+    \pause
+    \item \TeX は違う（これは自明）
+  \end{itemize}
+\end{frame}
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=kyara!15]
+\setbeamercolor{frametitle}{bg=kyara, fg=white}
+\setbeamercolor{structure}{fg=kyara}
+
+\begin{frame}[plain]
+  \begin{center}
+    \HUGE{28}{34}\color{kachi}\yasagoth
+    \TeX の記法がダメ
+    
+    だというなら、
+    
+    \TeX で軽量マークアップの
+    
+    処理系を実装すればいい
+  \end{center}
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue \texttt{revtex}}
+  \sffamily
+  \begin{itemize}
+    \item Re:VIEW記法で原稿を書ける\TeX フォーマット
+    \begin{itemize}
+      \item \href{https://github.com/k16shikano/revtex}{github.com/k16shikano/revtex}
+      \item 2015年の\TeX \& \LaTeX アドベントカレンダーネタ
+      \item アクティブ文字を駆使して実装
+    \end{itemize}
+  \end{itemize}
+  \begin{center}
+    \begin{columns}[c]
+      \begin{column}{.4\textwidth}
+      \includegraphics[width=\textwidth]{figures/revtex-input.png}
+      \end{column}
+      \begin{column}{.3\textwidth}
+      \includegraphics[width=\textwidth]{figures/revtex-output.png}
+      \end{column}
+    \end{columns}
+  \end{center}
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue \texttt{markdown-tex}}
+  \sffamily
+  \begin{itemize}
+    \item \TeX によるMarkdown処理系（\LaTeX 環境）
+    \begin{itemize}
+      \item \href{https://github.com/k16shikano/markdown-tex}{github.com/k16shikano/markdown-tex}
+      \item \href{https://connpass.com/event/63383/}{Markdown Night 2017 Summer}で思いついたネタ
+      \item expl3なら書けそうだったので書いてみた
+    \end{itemize}
+  \end{itemize}
+  \begin{center}
+    \begin{columns}[c]
+      \begin{column}{.4\textwidth}
+      \includegraphics[width=\textwidth]{figures/mdtex-input.png}
+      \end{column}
+      \begin{column}{.4\textwidth}
+      \includegraphics[width=\textwidth]{figures/mdtex-output.png}
+      \end{column}
+    \end{columns}
+  \end{center}
+\end{frame}
+
+\begin{frame}[plain]
+  \begin{center}
+    \HUGE{34}{34}\color{kachi}\yasagoth
+    \TeX があれば十分！\pause
+    \vskip\baselineskip
+    そんなはずない……
+  \end{center}
+\end{frame}
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=yamabuki!15]
+\setbeamercolor{frametitle}{bg=yamabuki, fg=black}
+\setbeamercolor{structure}{fg=yamabuki}
+
+{\usebackgroundtemplate{\includegraphics[height=0.95\paperheight]{figures/lightweightmarkup1.pdf}}%
+\begin{frame}[t]{\inhibitglue markdown-texでやっていること}
+  \sffamily
+  \begin{center}
+  \end{center}
+\end{frame}
+}
+
+{\usebackgroundtemplate{\includegraphics[height=0.95\paperheight]{figures/lightweightmarkup2.pdf}}%
+\begin{frame}[t]{\inhibitglue \TeX でやりたいことは違ったはず}
+  \sffamily
+  \begin{center}
+  \end{center}
+\end{frame}
+}
+
+{\usebackgroundtemplate{\includegraphics[height=0.95\paperheight]{figures/lightweightmarkup5.pdf}}%
+\begin{frame}[t]{\leavevmode\inhibitglue （軽量とは限らないけど）\newline マークアップ記法としての\ \LaTeX }
+  \sffamily
+  \begin{center}
+  \end{center}
+\end{frame}
+}
+
+{\usebackgroundtemplate{\includegraphics[height=0.95\paperheight]{figures/lightweightmarkup4.pdf}}%
+\begin{frame}[t]{\inhibitglue Markdownが\TeX／\LaTeX より簡単なのは当たり前}
+  \sffamily
+  \begin{center}
+  \end{center}
+\end{frame}
+}
+
+{\usebackgroundtemplate{\includegraphics[height=0.95\paperheight]{figures/lightweightmarkup3.pdf}}%
+\begin{frame}[t]{\inhibitglue Markdownの本来の用途はこっち}
+  \sffamily
+  \begin{center}
+  \end{center}
+\end{frame}
+}
+
+{\usebackgroundtemplate{\includegraphics[height=0.95\paperheight]{figures/lightweightmarkup3-2.pdf}}%
+\begin{frame}[t]{\inhibitglue TeXグッバイがあるとしたら……}
+  \sffamily
+  \begin{center}
+  \end{center}
+\end{frame}
+}
+
+{\usebackgroundtemplate{\includegraphics[height=0.95\paperheight]{figures/lightweightmarkup6.pdf}}%
+\begin{frame}[t]{\inhibitglue 軽量マークアップ記法の傾向 }
+  \sffamily
+  \begin{center}
+  \end{center}
+\end{frame}
+}
+
+{\usebackgroundtemplate{\includegraphics[height=0.95\paperheight]{figures/lightweightmarkup6-1.pdf}}%
+\begin{frame}[t]{\inhibitglue Pandocは最大公約数レイヤ }
+  \sffamily
+  \begin{center}
+  \end{center}
+\end{frame}
+}
+
+{\usebackgroundtemplate{\includegraphics[height=0.95\paperheight]{figures/lightweightmarkup7.pdf}}%
+\begin{frame}[t]{\inhibitglue マークアップ記法に応じたドキュメントシステムの傾向 }
+  \sffamily
+  \begin{center}
+  \end{center}
+\end{frame}
+}
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=toki!15]
+\setbeamercolor{frametitle}{bg=toki, fg=black}
+\setbeamercolor{structure}{fg=toki}
+
+\begin{frame}[t]{\inhibitglue ここまでのまとめ}
+  \sffamily
+  \begin{itemize}
+    \item \leavevmode\inhibitglue （軽量）マークアップには、\textbf{記法として}得手不得手がある
+    \begin{itemize}
+      \item \leavevmode\inhibitglue 「構造とスタイルの分離」という視点では、その得手不得手が見えない
+      \item \leavevmode\inhibitglue 「記法」という視点で層を分けたことで、すっきりモデル化できた
+    \end{itemize}\pause
+    \item では、ドキュメントにおける構造とスタイルの分離とは、いったい何だったのか？
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue 軽量マークアップにとっての構造？}
+  \sffamily
+  \begin{itemize}
+    \item Wiki記法
+    \begin{itemize}
+        \item ユーザによる書き込みから構造化された状態のWebページ群を自然に作り出すためのもの。構造化ドキュメントとはむしろ逆の発想
+        \item 木構造ではなく有向グラフを暗黙に作る
+    \end{itemize}
+    \item Markdown
+    \begin{itemize}
+        \item 電子メールで使われていたASCII記号による装飾からHTMLを生成するのが、もともとの発想
+        \item 構造化という視点ではない
+    \end{itemize}
+    \item Re:VIEW記法、AsciiDoc
+    \begin{itemize}
+        \item ソフトウェアの解説書の執筆用として開発されたもの
+        \item そういう書籍を作るために必要な構造を書きやすい記法
+    \end{itemize}
+    \item reStructuredText
+    \begin{itemize}
+        \item ソフトウェアドキュメントのための記法だった
+        \item Sphinxでは魔改造されてさまざまな構造が追加されている
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begingroup
+\setbeamertemplate{background canvas}[default]
+\setbeamercolor{background canvas}{bg=black}
+\setbeamercolor{structure}{fg=white}
+\begin{frame}[plain]
+  \begin{columns}
+    \begin{column}{.45\paperwidth}
+      \includegraphics[width=\textwidth]{figures/progo.jpg}
+    \end{column}
+    \begin{column}{.5\paperwidth}
+      \hspace*{2ex}[
+      \vbox {\raggedright\HUGE{12}{20}\vfill\color{white}%
+      reStructuredTextでHTMLの記事を生成していたので、そのままSphinxによりLaTeX経由で制作。
+      いろいろ拡張を書いたり、バッドノウハウが得られたので、そのうち制作記を公開予定。
+      }
+      \vfill
+      \vspace*{3\baselineskip}
+      \hspace*{2ex}
+      \vbox{\raggedright\HUGE{10}{12}\vfill\color{white}%
+        渋川よしき 著\\
+        A5判／360頁／本体3200円\\
+        ISBN：978-4-908686-03-0\\
+        10/22技術書典3で発売開始
+      }
+    \end{column}
+  \end{columns}
+\end{frame}
+\endgroup
+
+\begin{frame}[plain]
+  \begin{center}
+    \HUGE{28}{34}\color{kachi}\yasagoth
+    あらゆるドキュメントにとって汎用の構造を考えるのは、どう考えても自明な問題ではない
+  \end{center}
+\end{frame}
+
+{\usebackgroundtemplate{\includegraphics[height=0.95\paperheight]{figures/lightweightmarkup8.pdf}}%
+\begin{frame}[t]{\inhibitglue XML なら真に構造を記述できる }
+  \sffamily
+  \begin{center}
+  \end{center}
+\end{frame}
+}
+
+\begingroup
+\setbeamertemplate{background canvas}[default]
+\setbeamercolor{background canvas}{bg=black}
+\setbeamercolor{structure}{fg=white}
+\begin{frame}[plain]
+  \begin{columns}
+    \begin{column}{.45\paperwidth}
+      \includegraphics[width=\textwidth]{figures/tlp.jpg}
+    \end{column}
+    \begin{column}{.5\paperwidth}
+      \hspace*{2ex}[
+      \vbox {\raggedright\HUGE{12}{20}\vfill\color{white}%
+      左右のカラムで対話するボックスをページに配置していく、ふつうの構造じゃない本。
+      
+      原書PDFから独自の野良XMLを作り、xml2texで制作。
+      
+      xml2tex 
+      }
+      \vfill
+      \vspace*{3\baselineskip}
+      \hspace*{2ex}
+      \vbox{\raggedright\HUGE{10}{12}\vfill\color{white}%
+        Daniel P. Friedman and Carl Eastlund 著\\
+        中野圭介 監訳\\
+        A5判／240頁／本体3200円\\
+        ISBN：978-4-908686-02-3\\
+        10/22技術書典3で発売開始
+      }
+    \end{column}
+  \end{columns}
+\end{frame}
+\endgroup
+
+\begin{frame}[t]{\inhibitglue まとめ}
+  \sffamily
+  \begin{itemize}
+    \item 記法の層／組版エンジンの層でモデル化することにより軽量マークアップの位置づけが見える
+    \item \href{https://github.com/k16shikano/xml2tex}{github.com/k16shikano/xml2tex}超便利
+    \item ラムダノート株式会社は出版を中心として技術文書まわりのお手伝いをいろいろする会社です
+    \begin{itemize}
+      \item \url{https://lambdanote.com}
+    \end{itemize}
+  \end{itemize}
+  \begin{center}
+    \includegraphics[width=.5\textwidth]{figures/main-logo.pdf}
+  \end{center}
+\end{frame}
+
+\end{document}
