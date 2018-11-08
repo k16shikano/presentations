@@ -1,0 +1,81 @@
+%%%%% よく使うパッケージ
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{color}
+\usepackage{colortbl}%
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{float}
+\usepackage{alltt}
+\usepackage{verbatim}
+\usepackage{fancybox}
+\usepackage{okumacro}
+\usepackage{ifthen}
+\usepackage[vflt]{floatflt}
+\usepackage{atbegshi}
+
+%%%%% フォント設定
+\usepackage{type1cm}
+\usepackage[T1]{fontenc}
+\usepackage[deluxe]{otf}
+\usepackage{textcomp}
+\usepackage[scaled]{helvet}
+\renewcommand{\rmdefault}{ppl}
+\renewcommand{\sfdefault}{phv}
+\renewcommand{\ttdefault}{pcr}
+\renewcommand{\familydefault}{\sfdefault}
+\renewcommand{\kanjifamilydefault}{\gtdefault}
+
+%%%%% 禁則
+\prebreakpenalty`」=10000
+\postbreakpenalty`「=10000
+\prebreakpenalty`～=10000
+\postbreakpenalty`（=10000
+\predisplaypenalty = 0
+\postdisplaypenalty = 0
+\clubpenalty = 0
+\widowpenalty = 0
+
+%%%%% アミの定義
+\definecolor{10gray}{gray}{.9}%
+\definecolor{20gray}{gray}{.8}%
+\definecolor{30gray}{gray}{.7}%
+\definecolor{50gray}{gray}{.5}%
+\definecolor{70gray}{gray}{.3}%
+\definecolor{RoyalBlue}{RGB}{65,105,225}
+\definecolor{OliveGreen}{RGB}{46,139,87}
+\definecolor{Sienna}{RGB}{30,144,255}
+\definecolor{Orange}{RGB}{255,69,0}
+\definecolor{DarkGreen}{RGB}{0,100,0}
+
+
+\newcommand{\HUGE}[1]{\fontsize{#1pt}{#1pt}\selectfont}
+
+\newenvironment{code}{%
+  \begin{alltt}%
+    \renewcommand{\baselinestretch}{0.85}%
+    {\usefont{T1}{pcr}{m}{n}}%
+      \DeclareFontShape{T1}{pcr}{mc}{n}{<-> pcrr8tn}{}%
+    \usefont{T1}{pcr}{mc}{n}}{%
+  \end{alltt}%
+}
+
+\def\bslash{\raisebox{.3mm}{\scalebox{1.1}[0.75]{\(\backslash\)}}}
+\def\numbermark{\symbol{35}}
+\def\boldtt#1{%
+  {\sffamily{\usefont{T1}{pcr}{b}{n}\scalebox{.85}[1.0]{#1}}\hspace{1.5pt plus 0.5pt minus 1.5pt}}}
+\newcommand{\myurl}{\begingroup%
+  \def\UrlBreaks{\do\\\do\/\do\_\do\-\do\+\do\=\do\:\do\>}
+  \def\UrlSpecials{\do\ {\Url@space}\do\%{\Url@percent}\do\^^M{\Url@space}%
+    \Url@force@Tilde}%
+  {\usefont{T1}{pcr}{m}{n}}%
+    \DeclareFontShape{T1}{pcr}{mc}{n}{<-> pcrr8tn}{}%
+  \usefont{T1}{pcr}{mc}{n}%
+  \Url}
+\urlstyle{pcr}
+
+\def\gosh{{\color{RoyalBlue}gosh>}}
+
+\def\email#1{\href{mailto:#1}{\texttt{#1}}}
+\def\twitter#1{\href{http://twitter.com/#1}{\texttt{@#1}}}
