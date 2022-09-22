@@ -1,0 +1,172 @@
+%%%%% よく使うパッケージ
+\usepackage{amsmath, amssymb}
+\usepackage{color, colortbl}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{alltt}
+\usepackage{fvextra}
+\usepackage{ifthen}
+\usepackage{atbegshi}
+\usepackage{multirow}
+\usepackage{minijs}
+\usepackage[noalphabet]{pxchfon}
+
+\usepackage{tikz}
+\usepackage{tcolorbox}
+  \usetikzlibrary{arrows}
+  \usetikzlibrary{shapes}
+  \usetikzlibrary{decorations}
+  \usetikzlibrary{positioning}
+
+\input{jpncolor}
+
+%%%%% フォント設定
+\usepackage{type1cm}
+\usepackage[T1]{fontenc}
+\usepackage[deluxe, uplatex]{otf}
+\usepackage{textcomp}
+\usepackage[scaled]{helvet}
+\usepackage[nolucidascale]{lucidabr}
+\DeclareFontFamily{JY2}{ygt}{}
+\DeclareFontFamily{JT2}{ygt}{}
+\DeclareFontShape{JY2}{ygt}{b}{n}{<-> s * [\utf@sc@le] nmlyasab-h}{}
+\DeclareFontShape{JT2}{ygt}{b}{n}{<-> s * [\utf@sc@le] nmlyasab-v}{}
+\DeclareRobustCommand\yasagoth{\bfseries\sffamily%
+  \usefont{JY2}{ygt}{b}{n}}
+
+\renewcommand{\kanjifamilydefault}{\gtdefault}
+\setgothicfont{KoburinaGoStdN-W6.otf}
+\mathversion{bold}
+
+%%%%% 和欧間字詰め
+\def\@setfontsize#1#2#3{\@nomath#1%
+  \ifx\protect\@typeset@protect
+    \let\@currsize#1%
+  \fi
+  \fontsize{#2}{#3}\selectfont
+  \ifdim\parindent>\z@ \parindent=1zw \fi
+  \kanjiskip=.0zw plus .1zw minus .01zw
+  \xkanjiskip=0.25em plus 0.15em minus 0.06em}
+
+\DeclareRobustCommand\rmfamily
+        {\not@math@alphabet\rmfamily\mathrm
+         \romanfamily\rmdefault\kanjifamily\mcdefault\selectfont}
+\DeclareRobustCommand\sffamily
+        {\not@math@alphabet\sffamily\mathsf
+         \romanfamily\sfdefault\kanjifamily\gtdefault\selectfont}
+\DeclareRobustCommand\ttfamily
+        {\not@math@alphabet\ttfamily\mathtt
+         \romanfamily\ttdefault\kanjifamily\gtdefault\selectfont}
+
+%%%%% 見出しの和欧間字詰め、行頭アキの改善（not perfect）
+
+\setbeamertemplate{frametitle}{
+    \nointerlineskip\xkanjiskip=5pt plus 1pt minus5pt
+    \begin{beamercolorbox}[sep=0.3cm,ht=1.8em,wd=\paperwidth]{frametitle}
+        \vbox{}\vskip-2ex%
+        \strut\insertframetitle\strut
+        \vskip-0.8ex%
+    \end{beamercolorbox}}
+\def\gobbleall#1\gobbleend{}
+\long\def\beamer@@frametitle[#1]#2{%
+  \ifblank{#2}{}{%
+    \expandafter\gobbleall\ifx『#2\gobbleend
+    \gdef\insertframetitle{{\hspace*{-0.5em}#2\ifnum\beamer@autobreakcount>0\relax{}\space\usebeamertemplate*{frametitle continuation}\fi}}%
+    \else\gobbleend
+    \gdef\insertframetitle{{#2\ifnum\beamer@autobreakcount>0\relax{}\space\usebeamertemplate*{frametitle continuation}\fi}}\fi%
+  \gdef\beamer@frametitle{#2}%
+  \gdef\beamer@shortframetitle{#1}%
+  }%
+}
+
+%%%%% 禁則
+\prebreakpenalty`」=10000
+\postbreakpenalty`「=10000
+\prebreakpenalty`～=10000
+\postbreakpenalty`（=10000
+\predisplaypenalty = 0
+\postdisplaypenalty = 0
+\clubpenalty = 0
+\widowpenalty = 0
+
+%%%%% アミの定義
+\definecolor{10gray}{gray}{.9}%
+\definecolor{20gray}{gray}{.8}%
+\definecolor{30gray}{gray}{.7}%
+\definecolor{50gray}{gray}{.5}%
+\definecolor{70gray}{gray}{.3}%
+\definecolor{RoyalBlue}{RGB}{65,105,225}
+\definecolor{OliveGreen}{RGB}{46,139,87}
+\definecolor{Sienna}{RGB}{30,144,255}
+\definecolor{Orange}{RGB}{255,69,0}
+\definecolor{DarkGreen}{RGB}{0,100,0}
+
+%%%%% 連番スタイル
+\setbeamertemplate{enumerate items}[default]
+
+%%%%% 箇条書き
+\defbeamertemplate*{itemize/enumerate body begin}{}{
+  \let\this@beamer@cramped\beamer@cramped
+  \renewcommand{\beamer@cramped}{
+    \this@beamer@cramped
+    \addtolength{\itemsep}{\baselineskip}}}
+\defbeamertemplate*{itemize/enumerate body end}{}{
+  \let\beamer@cramped\this@beamer@cramped}
+
+\defbeamertemplate*{itemize/enumerate subbody begin}{}{
+  \let\sub@beamer@cramped\beamer@cramped
+  \renewcommand{\beamer@cramped}{
+    \sub@beamer@cramped
+    \addtolength{\itemsep}{-\baselineskip}}}
+\defbeamertemplate*{itemize/enumerate subbody end}{}{
+  \let\beamer@cramped\sub@beamer@cramped}
+
+\let\orgitem\item
+\def\item{\orgitem\leavevmode\inhibitglue{}}
+
+\setlength{\leftmargini}{7pt}
+\setlength{\leftmarginii}{7pt}
+
+%%%%% テキスト（hbox）のふちを白に（背景に画像置くときとか）
+\newcommand\bw[1]{%
+  \begin{tikzpicture}[remember picture,baseline=(T.base)]%
+    \foreach \x in {-0.03,0.03} {%
+      \foreach \y in {-0.03,0.03} {%
+        \node[white,inner sep=0pt, outer sep=0pt] at (\x em, \y em) {#1};%
+      }%
+    }%
+    \node[inner sep=0pt, outer sep=0pt] (T) at (0,0) {#1};%
+  \end{tikzpicture}%
+}
+
+
+%%%%% misc style
+\newcommand{\HUGE}[2]{\fontsize{#1}{#2}\selectfont}
+
+\newenvironment{code}{%
+  \begin{alltt}%
+    \renewcommand{\baselinestretch}{0.85}%
+    {\usefont{T1}{pcr}{m}{n}}%
+      \DeclareFontShape{T1}{pcr}{mc}{n}{<-> pcrr8tn}{}%
+    \usefont{T1}{pcr}{mc}{n}}{%
+  \end{alltt}%
+}
+
+\def\bslash{\raisebox{.3mm}{\scalebox{1.1}[0.75]{\(\backslash\)}}}
+\def\numbermark{\symbol{35}}
+\def\boldtt#1{%
+  {\sffamily{\usefont{T1}{pcr}{b}{n}\scalebox{.85}[1.0]{#1}}\hspace{1.5pt plus 0.5pt minus 1.5pt}}}
+\newcommand{\myurl}{\begingroup%
+  \def\UrlBreaks{\do\\\do\/\do\_\do\-\do\+\do\=\do\:\do\>}
+  \def\UrlSpecials{\do\ {\Url@space}\do\%{\Url@percent}\do\^^M{\Url@space}%
+    \Url@force@Tilde}%
+  {\usefont{T1}{pcr}{m}{n}}%
+    \DeclareFontShape{T1}{pcr}{mc}{n}{<-> pcrr8tn}{}%
+  \usefont{T1}{pcr}{mc}{n}%
+  \Url}
+\urlstyle{pcr}
+
+\def\gosh{{\color{RoyalBlue}gosh>}}
+
+\def\email#1{\href{mailto:#1}{\texttt{#1}}}
+\def\twitter#1{\href{http://twitter.com/#1}{\texttt{@#1}}}
