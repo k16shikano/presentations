@@ -1,0 +1,83 @@
+\documentclass[book,paper=a4]{jlreq}
+\begin{document}
+あ
+\end{document}
+
+\directlua{dofile("./yafoot.lua")}
+
+\documentclass[12pt]{ltjsarticle}
+
+\newcount\yafootnotecount
+\newdimen\footnotewidth
+\footnotewidth=\textwidth
+\newdimen\paryafootnoteskip
+\paryafootnoteskip=.1\baselineskip
+
+\def\yafootnote#1{%
+  \global\advance\yafootnotecount 1
+  \global\expandafter\newbox
+    \csname yafoot_\the\yafootnotecount\endcsname
+  \global\expandafter\setbox
+    \csname yafoot_\the\yafootnotecount\endcsname=
+    \vtop{\hsize\footnotewidth\par\hbox{\vrule width0pt height4pt}
+      \footnotesize\narrowbaselines\noindent *\the\yafootnotecount\, #1}%
+  \bgroup
+    \attribute100=\expandafter\the
+      \csname yafoot_\the\yafootnotecount\endcsname
+    \expandafter\yafootnotemark\expandafter{\the\yafootnotecount}
+    \vadjust {\pdfliteral{}}%
+  \egroup
+}
+
+\def\yafootnotemark#1{\inhibitglue\small *\ensuremath{^{\mbox{#1}}}}
+
+\directlua{%
+    luatexbase.add_to_callback
+      ("post_linebreak_filter",push_footnotes_below_lines,"pushftn")}
+
+\directlua{%
+    luatexbase.add_to_callback
+      ("pre_output_filter",move_footnote_bottom,"moveftn")}
+
+\directlua{%
+    luatexbase.add_to_callback
+      ("vpack_filter",crush_height_of_hlist,"crushhbox")}
+
+\directlua{%
+    luatexbase.add_to_callback
+      ("hpack_filter",crush_height_of_hlist,"crushhbox")}
+
+\title{\TeX の脚注をなんとかしたい}
+\author{鹿野桂一郎}
+\date{2019年10月12日}
+
+\usepackage[most]{tcolorbox}
+\usepackage[colorlinks=true]{hyperref}
+\begin{document}
+\maketitle
+
+\vskip15\baselineskip
+
+\begin{tcolorbox}[breakable,enhanced,before upper={\parindent1em}]
+  脚注は、横組の書籍においては各ページの下部に配置される、本文の内容に対する付加的な情報である。
+  通常、本文の途中にアンカーを設置し、その箇所に対応する付加的な内容を同一ページの下部に出力する
+  \yafootnote{発表者は、\href{https://texconf16.tumblr.com/}{「TeXユーザの集い2016」}にて、アンカーと同一ページの下部に配置しない脚注の可能性を模索する発表を行った。なお本発表はそのときの発表には直接関係しない。なお本発表はそのときの発表には直接関係しない。なお本発表はそのときの発表には直接関係しない。なお本発表はそのときの発表には直接関係しない。なお本発表はそのときの発表には直接関係しない。なお本発表はそのときの発表には直接関係しない。なお本発表はそのときの発表には直接関係しない。}。
+
+  自動組版で脚注を実現するためには、脚注として組まれるべき内容を配置するため、ページ下部にあらかじめ必要な余白を確保する必要がある。
+  その余白の量を決定するには、そもそもページをどこで分割するかの決定に割り込む必要がある。
+  
+  \LaTeX などの\TeX ベースの自動組版システムでは、\TeX の「インサート」と呼ばれる機能を利用して、この割り込み処理を実現している。
+  通常の本文段落にアンカーが出現する脚注に関しては、このインサートを利用したアルゴリズムにより、ほぼ満足がいく形で実現できる。
+
+  しかしよく知られているように、この仕組みは\TeX の表組（\texttt{tabular}環境）中では利用できない。
+  また、近年の書籍組版で多様されることが多いtcolorboxなどでも、ページ分割を許容する設定（\texttt{breakable}）では、
+  「アンカーと同一ページの下部に配置される」という、脚注として期待される挙動を得ることが事実上不可能である。
+
+  本発表では、これらの環境で\TeX のインサートを利用した脚注が期待通りに動作しない理由を示す。
+  また、発表者がこれまでに試みてきた手法を紹介する。
+\end{tcolorbox}
+
+
+
+\end{document}
+
