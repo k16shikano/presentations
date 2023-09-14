@@ -1,0 +1,376 @@
+\documentclass[14pt,dvipdfmx,uplatex]{beamer}
+\usetheme{Madrid}
+\setbeamertemplate{footline}[page number]{}
+\beamertemplatenavigationsymbolsempty
+\usepackage{mypresentation}
+\usepackage{fvextra}
+\usepackage{lucidabr}
+%\AtBeginShipoutFirst{\special{pdf:tounicode EUC-UCS2}}
+\usepackage{tikz}
+\usepackage{tcolorbox}
+\usetikzlibrary{arrows}
+\usetikzlibrary{shapes.callouts}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{positioning}
+
+\usepackage[noalphabet]{pxchfon}
+\input{jpncolor}
+
+\setgothicfont{migmix-2p-bold.ttf}
+%\setgothicfont{YasashisaBold.ttf}
+%\setminchofont{migmix-2p-bold.ttf} % 本文
+\mathversion{bold}
+
+\setbeamerfont{title}{size=\HUGE{28}{34},family={\yasagoth}}
+\setbeamerfont{frametitle}{size=\HUGE{20}{28},series={\yasagoth}}
+\setbeamerfont{frametext}{size=\HUGE{20}{28},series={\yasagoth}}
+\setbeamertemplate{frametitle}[default][left]
+\usefonttheme{professionalfonts}
+
+\setbeamercolor{background}{bg=white}
+\setbeamercolor{author}{fg=black}
+\setbeamercolor{date}{fg=black}
+\setbeamercolor{title}{fg=white, bg=kachi}
+\setbeamercolor{frametitle}{fg=white}
+\setbeamercolor{normal text}{fg=black}
+\setbeamerfont{normal text}{family=\rmfamily, series=\bfseries}
+\setbeamercolor{structure}{fg=black}
+
+\makeatletter
+\define@key{beamerframe}{t}[true]{% top
+  \beamer@frametopskip=.2cm plus .5\paperheight\relax%
+  \beamer@framebottomskip=0pt plus 1fill\relax%
+  \beamer@frametopskipautobreak=\beamer@frametopskip\relax%
+  \beamer@framebottomskipautobreak=\beamer@framebottomskip\relax%
+  \def\beamer@initfirstlineunskip{}%
+}
+\def\header#1{\vskip.5\baselineskip{\large\sffamily #1}}
+\tikzset{
+  notice/.style  = { fill=shozyohi, white, 
+                     rectangle callout, 
+                     rounded corners,
+                     callout absolute pointer={#1} }
+}
+\makeatother
+
+\setlength{\leftmargini}{12pt}
+\setlength{\leftmarginii}{12pt}
+
+\edef\0{\string\0}
+\DeclareTextCommand{\CarriageReturn}{JY2}{\015}
+
+\title{表とリスト}
+\author{\sffamily 鹿野 桂一郎\\
+\bfseries ラムダノート株式会社\\
+\small\bfseries \email{k16.shikano@lambdanote.com} \\ 
+\twitter{golden\_lucky} 
+}
+\date{\sffamily\footnotesize 2021年11月13日\\ 於\, TeXConf 2021}
+
+\begin{document}
+\fontseries{ub}\selectfont
+
+%{\usebackgroundtemplate{\includegraphics[height=1.1\paperheight]{skyrocket.jpg}}%
+\frame{\titlepage}
+%}
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=kachi!15]
+\setbeamercolor{frametitle}{bg=kachi, fg=white}
+\setbeamercolor{structure}{fg=kachi}
+
+\begin{frame}[t]{\inhibitglue 構造とスタイルの分離の話？}
+  \sffamily
+    \begin{itemize}
+      \item 近いけどちょっと違う（と思う）
+      \item 構造/スタイルを「どう書くか」という話\\
+        \footnotesize cf. 『\TeX{}は軽量マークアップ言語の夢をみるか』（\TeX{}Conf 2017）\\
+        \url{https://www.slideshare.net/k16shikano/tex-80841192}
+    \end{itemize}
+    \vspace*{-5\baselineskip}
+    \begin{center}
+      \includegraphics[height=0.9\paperheight]{figures/lightweightmarkup6.pdf}
+    \end{center}
+    \vfill
+\end{frame}
+
+\begin{frame}[plain]
+  \begin{center}
+    \HUGE{28}{34}\color{kachi}\yasagoth
+    せっかく2次元の平面があるのだし
+    ベタなテキスト以外の表現がしたい
+  \end{center}
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue スタイルの観点}
+  \sffamily
+  \begin{itemize}
+  \item インデント
+  \item 行頭の記号や連番
+  \item 格子（表）
+  \end{itemize}
+
+  \vfill\footnotesize
+
+  もっとも、
+  「見出し」とか「ドロップキャップ」とかも
+  紙面が2次元であることを前提としたスタイルだし、
+  いわゆる組版は全部そうだっていえるのかも
+  
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue 構造の観点}
+  \sffamily
+  \begin{itemize}
+  \item 表
+  \item 箇条書き（ネストもあるよ）
+  \end{itemize}
+
+  \vfill\footnotesize
+
+  ドキュメントの「構造」として
+  2次元の紙面というメディアを前提とした概念が広く認知されているのは、
+  よく考えるとよく考えたくなりますね
+  
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue テキストエディタの観点}
+  \sffamily
+  \begin{itemize}
+  \item 表←{\color{shozyohi} 敵}
+  \item 箇条書き（ネストもあるよ）←{\color{rurikon} まあまあ}
+  \end{itemize}
+
+  \vfill\footnotesize
+
+  テキストエディタに限らず、
+  非WYSIWYGな編集ツールでは
+  「行単位で文字列がまとまっている」
+  ことが前提になっていることが多い。
+  （Unix文化を引きずっているだけかも）
+  
+\end{frame}
+
+\begin{frame}[plain]
+  \begin{center}
+    \HUGE{28}{34}\color{kachi}\yasagoth
+    表を\\
+    箇条書きのネストで\\
+    記述すればいいんじゃね？
+  \end{center}
+\end{frame}
+
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=kyara!15]
+\setbeamercolor{frametitle}{bg=kyara, fg=white}
+\setbeamercolor{structure}{fg=kyara}
+
+
+\begin{frame}[t,fragile=singleslide]{\inhibitglue List-Driven Tables}
+  \sffamily
+  \begin{itemize}
+    \item reStructuredtext（の実装であるDocutils）で発明されたっぽい
+    \begin{itemize}
+    \item \footnotesize
+      \url{https://docutils.sourceforge.io/docs/dev/rst/alternatives.html\#list-driven-tables}
+    \item Dylan Jayさんという方のアイデアとされている
+    \end{itemize}
+  \end{itemize}
+  \begin{center}
+    \begin{columns}[c]
+      \begin{column}{.5\textwidth}
+\fontsize{7.5pt}{7pt}\selectfont
+\begin{tcolorbox}[left=1pt]
+\begin{Verbatim}
+.. list-table:: Frozen Delights!
+  :widths: 15 10 30
+  :header-rows: 1
+
+  * - Treat
+    - Quantity
+    - Description
+  * - Albatross
+    - 2.99
+    - On a stick!
+  * - Crunchy Frog
+    - 1.49
+    - If we took the bones out,
+      it wouldn't be crunchy,
+      now would it?
+  * - Gannet Ripple
+    - 1.99
+    - On a stick!
+\end{Verbatim}
+\end{tcolorbox}
+      \end{column}
+      \begin{column}{.4\textwidth}
+        \includegraphics[width=.8\textwidth]{figures/list-table-result.png}
+        % rst2htmlの結果
+      \end{column}
+    \end{columns}
+  \end{center}
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue \TeX{}でList Table？}
+  \sffamily
+  \begin{itemize}
+    \item \TeX{}の記法で、「ネストした箇条書き」と「表」と、どっちが書きやすい？
+    \item 軽量マークアップ言語の記法を\TeX{}で使いたいなら、最初から軽量マークアップ言語を使えばいいのでは？
+    \item そもそも表を気軽に使うな！
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[t,fragile=singleslide]{\inhibitglue \TeX{}でList Table！}
+\fontsize{7pt}{6.5pt}\selectfont
+\begin{tcolorbox}[left=1pt]
+\begin{Verbatim}[numbers=left, highlightlines={2, 5, 12-13, 19-20, 22}]
+\regex_new:N \c_listtable_mark
+\regex_gset:Nn \c_listtable_mark { [\n\r]+[\*\-][\s]+[\*\-] }
+
+\regex_new:N \c_listtable_nested_mark
+\regex_gset:Nn \c_listtable_nested_mark { [\n\r]+[\s]{2,}[\*\-] }
+
+\seq_new:N \l_table_lines_seq
+\seq_new:N \l_cell_items_seq
+\scan_new:N \s_lastline
+
+\NewEnviron{parse_listtable}[1]{
+  \exp_args:NNf \regex_split:NnN \c_listtable_mark { \BODY\s_lastline }
+                                 \l_table_lines_seq
+  \seq_remove_all:Nn \l_table_lines_seq {   }
+  
+  \begin{tabular}{#1}\hline
+    \seq_map_inline:Nn \l_table_lines_seq
+    {
+      \exp_args:NNf \regex_split:NnN \c_listtable_nested_mark { ##1 }
+                                     \l_cell_items_seq
+      \seq_get_right:NN \l_cell_items_seq \c_tmpa_tl
+      \exp_args:Nnf \regex_match:nnTF { \c{s_lastline} } { \c_tmpa_tl }
+        { \seq_use:Nnnn \l_cell_items_seq { } { & } { & } }
+        { \seq_put_right:Nn \l_cell_items_seq { \c_empty_tl }
+          \seq_use:Nnnn \l_cell_items_seq { } { & } { \\\hline } }
+    }\\\hline
+  \end{tabular}
+}
+\end{Verbatim}
+\end{tcolorbox}
+\end{frame}
+
+\begin{frame}[t,fragile=singleslide]{\inhibitglue \TeX{}でList Table！（続き）}
+\fontsize{7pt}{6.5pt}\selectfont
+\begin{tcolorbox}[left=1pt]
+  \begin{Verbatim}
+    \RequirePackage{xparse}
+    \RequirePackage{environ}
+
+    \NewDocumentEnvironment{listtable}{ }{%
+      \obeylines%
+      \obeyspaces%
+      \parse_listtable%
+    }{%
+      \endparse_listtable%
+    }
+  \end{Verbatim}
+\end{tcolorbox}
+
+\sffamily\vfill\scriptsize
+やっていることは単純
+\begin{itemize}
+\item 「表の各行になる箇条書き」を正規表現で切り出して\Verb{\l_table_lines_seq}に格納
+\item そのシーケンスから「セルになる箇条書き」を正規表現で切り出して\Verb{\l_cell_items_seq}に格納（途中に「\Verb{&}」を挟む）
+\item そのシーケンスの末尾に「\Verb{\}」を挿入
+\item 全体を\texttt{tabular}でくるむ
+\item \Verb{\regex_split:NnN}が末尾にゴミを挿入するっぽいのでちょっとはまった（22行め付近）
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t,fragile=singleslide]{\inhibitglue 便利？}
+  \sffamily
+  \begin{center}
+    \begin{columns}[c]
+      \begin{column}{.6\textwidth}
+\fontsize{7.5pt}{7pt}\selectfont
+\begin{tcolorbox}[left=1pt]
+\begin{Verbatim}
+\documentclass[uplatex]{jsarticle}
+\usepackage{listtable}
+\usepackage{amsmath}
+\begin{document}
+\begin{listtable}{|p{5em}|p{4em}|p{7em}|}
+* - Treat
+  - Quantity
+  - Description
+* - Albatross
+  - 2.99
+  - On a stick!
+* - Crunchy Frog
+  - 1.49
+  - If we took the bones out,
+    it wouldn't be crunchy,
+    now would it?
+* - Gannet Ripple
+  - 1.99
+  - On a stick!
+\end{listtable}
+\end{document}
+\end{Verbatim}
+\end{tcolorbox}
+      \end{column}
+      \begin{column}{.4\textwidth}
+        \includegraphics[width=.8\textwidth]{figures/list-table-result-3.png}
+      \end{column}
+    \end{columns}
+  \end{center}
+\end{frame}
+
+\begin{frame}[t,fragile=singleslide]{\inhibitglue 便利なような気もする}
+  \sffamily
+  \begin{center}
+    \begin{columns}[c]
+      \begin{column}{.6\textwidth}
+\fontsize{7.5pt}{7pt}\selectfont
+\begin{tcolorbox}[left=1pt]
+\begin{Verbatim}
+\documentclass[uplatex]{jsarticle}
+\usepackage{listtable}
+\usepackage{amsmath}
+\begin{document}
+\begin{listtable}{|c|c|c|}
+* - $x$
+  - \fbox{gge}
+  - adfdf $\sqrt{\mathrm{da}}$ dsd
+* - d herko
+  - \TeX
+  - c
+
+* - \texttt{ho ge}
+  - yes
+  - no%
+
+\end{listtable}
+\end{document}
+\end{Verbatim}
+\end{tcolorbox}
+      \end{column}
+      \begin{column}{.4\textwidth}
+        \includegraphics[width=.8\textwidth]{figures/list-table-result-tex.png}
+      \end{column}
+    \end{columns}
+  \end{center}
+\end{frame}
+
+\begin{frame}[t]{\inhibitglue まとめ（という名のrant）}
+  \sffamily
+  \begin{itemize}
+  \item 記法とスタイルにうまく折り合いをつけることが「テキストエディタでやる組版」に求められることなのでは
+  \item 記法（スタイルではなく）を構造から独立させるというムーブメントが軽量マークアップなのかもしれない
+  \item ラムダノート株式会社は出版を中心として技術文書まわりのお手伝いをいろいろする会社です
+    \begin{itemize}
+      \item \url{https://lambdanote.com}
+    \end{itemize}
+  \end{itemize}
+  \begin{center}
+    \includegraphics[width=.5\textwidth]{figures/main-logo.pdf}
+  \end{center}
+\end{frame}
+
+\end{document}
