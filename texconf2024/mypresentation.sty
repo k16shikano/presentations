@@ -1,0 +1,167 @@
+%%%%% よく使うパッケージ
+\usepackage{amsmath, amssymb}
+\usepackage{color, colortbl}
+\usepackage{graphicx, tabularx}
+\usepackage{ifthen}
+\usepackage{atbegshi}
+\usepackage{multirow}
+\usepackage{fvextra}
+\usepackage{jpncolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usetikzlibrary{shapes.callouts}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{positioning}
+\usepackage[skins, breakable]{tcolorbox}
+\usepackage{xpatch}
+
+%%%%% アミの定義
+\definecolor{10gray}{gray}{.9}%
+\definecolor{20gray}{gray}{.8}%
+\definecolor{30gray}{gray}{.7}%
+\definecolor{50gray}{gray}{.5}%
+\definecolor{70gray}{gray}{.3}%
+\definecolor{RoyalBlue}{RGB}{65,105,225}
+\definecolor{OliveGreen}{RGB}{46,139,87}
+\definecolor{Sienna}{RGB}{30,144,255}
+\definecolor{Orange}{RGB}{255,69,0}
+\definecolor{DarkGreen}{RGB}{0,100,0}
+
+%%%%% フォント
+\usepackage{luacode,luatexbase}
+\usepackage{fontspec}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\setmainfont[BoldFont={LucidaSansOT-Demi.otf}]{LucidaSansOT.otf}
+\setsansfont[BoldFont={LucidaSansOT-Demi.otf}]{LucidaSansOT.otf}
+\setmonofont[BoldFont={LucidaConsoleDK-Bold.otf}]{LucidaConsoleDK.otf}
+
+\usepackage{luatexja}
+\usepackage{luatexja-otf}
+\usepackage[match]{luatexja-fontspec}
+\usepackage[no-math,deluxe,expert]{luatexja-preset}
+\ltjnewpreset{mypresentation}{%
+mc=NotoSerifCJKjp-Bold.otf,
+mc-bx=NotoSerifCJKjp-Black,
+gt-m=NotoSansCJKjp-Medium.otf,
+gt-b=NotoSansCJKjp-Bold.otf,
+gt-bx=NotoSansCJKjp-Black.otf,
+__custom = false, __office = false, __noembed = false}
+\ltjapplypreset{mypresentation}
+\renewcommand{\kanjifamilydefault}{\gtdefault}
+
+\newcommand{\HUGE}[2]{\fontsize{#1}{#2}\selectfont}
+\def\email#1{\href{mailto:#1}{\texttt{#1}}}
+\def\twitter#1{\href{http://twitter.com/#1}{\texttt{@#1}}}
+\mathversion{bold}
+
+%%%%% 箇条書きスタイル再設定
+\xpatchcmd{\itemize}
+  {\def\makelabel}
+  {\ifnum\@itemdepth=1\relax
+     \setlength\itemsep{1ex}% separation for first level
+   \else
+     \ifnum\@itemdepth=2\relax
+       \setlength\itemsep{0.5ex}% separation for second level
+     \else
+       \ifnum\@itemdepth=3\relax
+         \setlength\itemsep{0.25ex}% separation for third level
+   \fi\fi\fi\def\makelabel
+  }
+ {}
+ {}
+
+
+%%%%% Beamerフレーム
+\usetheme{Madrid}
+\setbeamertemplate{footline}[page number]{}
+\beamertemplatenavigationsymbolsempty
+
+\setbeamerfont{title}{size=\HUGE{28}{34},series={\bfseries}}
+\setbeamerfont{frametitle}{size=\HUGE{20}{28},series={\bfseries}}
+\setbeamerfont{frametext}{size=\HUGE{20}{28},series={\bfseries}}
+\setbeamertemplate{frametitle}[default][left]
+\setbeamertemplate{itemize items}[triangle]
+\setbeamertemplate{enumerate items}[default]
+\usefonttheme{professionalfonts}
+
+\setbeamercolor{background}{bg=white}
+\setbeamercolor{author}{fg=black}
+\setbeamercolor{date}{fg=black}
+\setbeamercolor{title}{fg=white, bg=kachi}
+\setbeamercolor{frametitle}{fg=white}
+\setbeamercolor{normal text}{fg=black}
+\setbeamercolor{structure}{fg=black}
+
+\define@key{beamerframe}{t}[true]{% top
+  \beamer@frametopskip=.2cm plus .5\paperheight\relax%
+  \beamer@framebottomskip=0pt plus 1fill\relax%
+  \beamer@frametopskipautobreak=\beamer@frametopskip\relax%
+  \beamer@framebottomskipautobreak=\beamer@framebottomskip\relax%
+  \def\beamer@initfirstlineunskip{}%
+}
+\def\header#1{\vskip.5\baselineskip{\large\sffamily #1}}
+\tikzset{
+  notice/.style  = { fill=shozyohi, white, 
+                     rectangle callout, 
+                     rounded corners,
+                     callout absolute pointer={#1} }
+}
+
+\setlength{\leftmargini}{12pt}
+\setlength{\leftmarginii}{12pt}
+
+
+\patchcmd{\@makefnmark}{\@textsuperscript}{\@makefnmark@aux}{}{}
+\newcommand*{\@makefnmark@aux}[1]{[#1]}
+
+\setbeamertemplate{footnote}{%
+    \leavevmode \insertfootnotemark~\insertfootnotetext
+}
+\setbeamerfont{footnote}{size=\footnotesize}
+\setbeamertemplate{footnote}{\hspace*{5mm}%
+  \advance\leftskip 3\zw
+  \advance\leftskip 5mm
+  \advance\leftskip 0.3\zw
+  \parindent 1\zw
+  \noindent
+  \llap{\insertfootnotemark\hskip0.3\zw}\insertfootnotetext}
+
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{255,255,255}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.75,0.01,0.01}{\textbf{\colorbox[rgb]{0.97,0.90,0.90}{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.79,0.38,0.79}{#1}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.00,0.34,0.68}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.69,0.50,0.00}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.39,0.29,0.61}{\textbf{#1}}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.57,0.30,0.62}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.54,0.53,0.53}{#1}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.00,0.58,1.00}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.67,0.33,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.12,0.11,0.11}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.00,0.34,0.68}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.69,0.50,0.00}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.38,0.47,0.50}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.75,0.01,0.01}{\underline{#1}}}
+\newcommand{\ExtensionTok}[1]{\textcolor[rgb]{0.00,0.58,1.00}{\textbf{#1}}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.69,0.50,0.00}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.39,0.29,0.61}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{1.00,0.33,0.00}{#1}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.69,0.50,0.00}{#1}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.12,0.11,0.11}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{\textcolor[rgb]{0.12,0.11,0.11}{#1}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.12,0.11,0.11}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.43,0.16}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.00,0.43,0.16}{#1}}
+\newcommand{\RegionMarkerTok}[1]{\textcolor[rgb]{0.00,0.34,0.68}{\colorbox[rgb]{0.88,0.91,0.97}{#1}}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.24,0.68,0.91}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{1.00,0.33,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.75,0.01,0.01}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.34,0.68}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.75,0.01,0.01}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.75,0.01,0.01}{#1}}
