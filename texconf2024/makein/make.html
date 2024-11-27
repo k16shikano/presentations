@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Background with Nested Rectangle in Glyph</title>
+<style>
+  .nested-rectangle {
+    font-size: 200px;
+    font-weight: bold;
+    color: transparent;
+
+    /* 背景色の設定 */
+    background-color: #2b87ff; /* 外側の青い背景 */
+
+    /* 内側の赤い長方形の設定 */
+    background-image:
+      linear-gradient(to right, transparent 55%, #99e2ff 50%),
+      linear-gradient(to right, #99e2ff 50%, transparent 50%);
+    background-position:
+      50% 42%,
+      0% 85%; /* 赤い長方形を中央に配置 */
+    background-size:
+      100% 22%,
+      100% 15%; /* 赤い長方形のサイズ */
+    background-repeat: no-repeat;
+
+    /* 文字の形状にクリップ */
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+</style>
+</head>
+<body>
+
+<span class="nested-rectangle">負</span>
+
+</body>
+</html>

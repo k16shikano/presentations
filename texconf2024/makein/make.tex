@@ -1,0 +1,31 @@
+\documentclass[lualatex]{jlreq}
+\usepackage[haranoaji,deluxe]{luatexja-preset}
+\usepackage{tikz}
+\usetikzlibrary{positioning,calc}
+
+\usepackage{xcolor}
+\definecolor{blizzardblue}{rgb}{0.67, 0.9, 0.93}
+\definecolor{bleudefrance}{rgb}{0.19, 0.55, 0.91}
+\begin{document}
+
+\begin{tikzpicture}
+  \node[anchor=base, yshift=-0.0ex, inner sep=0pt, outer sep=0pt, minimum height=0pt, minimum width=0pt] 
+    (A) at (0,0) 
+    {\color{bleudefrance}\gtfamily\bfseries\fontsize{200px}{200px}\selectfont 負};
+
+  \begin{scope}
+    \clip [shift={(A.south west)}, xshift=0mm, yshift=0mm] (110px, 90px) rectangle (200px, 155px);
+    \node[anchor=base, yshift=-0.0ex, inner sep=0pt, outer sep=0pt, minimum height=0pt, minimum width=0pt] 
+      (0,0) 
+      {\color{blizzardblue}\gtfamily\bfseries\fontsize{200px}{200px}\selectfont 負};
+  \end{scope}
+
+  \begin{scope}
+    \clip [shift={(A.south west)}, xshift=0mm, yshift=0mm] (0px, 0px) rectangle (100px, 39px);
+    \node[anchor=base, yshift=-0.0ex, inner sep=0pt, outer sep=0pt, minimum height=0pt, minimum width=0pt] 
+      (0,0) 
+      {\color{blizzardblue}\gtfamily\bfseries\fontsize{200px}{200px}\selectfont 負};
+  \end{scope}
+\end{tikzpicture}
+
+\end{document}

@@ -1,0 +1,73 @@
+\documentclass[lualatex]{jlreq}
+\usepackage[haranoaji,deluxe]{luatexja-preset}
+\usepackage{tikz}
+\usetikzlibrary{positioning,calc}
+
+\usepackage{xcolor}
+\definecolor{blizzardblue}{rgb}{0.67, 0.9, 0.93}
+\definecolor{bleudefrance}{rgb}{0.19, 0.55, 0.91}
+\begin{document}
+
+\begin{tikzpicture}
+  \draw[gray, dashed] (-1,-0.1) -- (5,-0.1);  % ベースライン（灰色の破線）
+
+  \node[anchor=base, yshift=-0.1ex, inner sep=0pt, outer sep=0pt, minimum height=0pt, minimum width=0pt] 
+    (A) at (0,0) 
+    {\color{bleudefrance}\gtfamily\bfseries\fontsize{33}{33}\selectfont 負};
+  \node[anchor=base, yshift=-0.7ex, inner sep=0pt, outer sep=0pt, minimum height=0pt, minimum width=0pt]
+    (B) 
+    [right=-5pt of A.east] {\mdseries\fontsize{23}{23}\selectfont け};
+  \node[anchor=base, yshift=0ex, inner sep=0pt, outer sep=0pt, minimum height=0pt, minimum width=0pt]
+    (C)
+    [right=-8pt of B.east] {\mdseries\fontsize{32}{32}\selectfont ヒ};
+  \node[anchor=base, yshift=0ex, inner sep=0pt, outer sep=0pt, minimum height=0pt, minimum width=0pt]
+    (D)
+    [right=-7pt of C.east] {\mdseries\fontsize{32}{32}\selectfont ロ};
+  \node[anchor=base, yshift=0ex, inner sep=0pt, outer sep=0pt, minimum height=0pt, minimum width=0pt]
+    (E)
+    [right=-7pt of D.east] {\mdseries\fontsize{32}{32}\selectfont イ};
+  \node[anchor=base, yshift=0ex, inner sep=0pt, outer sep=0pt, minimum height=0pt, minimum width=0pt]
+    (F)
+    [right=-9pt of E.east] {\mdseries\fontsize{32}{32}\selectfont ン};
+  \node[anchor=base, yshift=-1.5ex, inner sep=0pt, outer sep=0pt, minimum height=0pt, minimum width=0pt]
+    (G)
+    [right=-5pt of F.east] {\mdseries\fontsize{15}{15}\selectfont が};
+
+  \begin{scope}
+    \clip [shift={(A.south west)}, xshift=0mm, yshift=0mm] (0,0) rectangle (5.5mm,2.4mm);
+    \node[anchor=base, yshift=-0.1ex, inner sep=0pt, outer sep=0pt, minimum height=0pt, minimum width=0pt] 
+      (0,0) 
+      {\color{blizzardblue}\gtfamily\bfseries\fontsize{33}{33}\selectfont 負};
+  \end{scope}
+
+  \begin{scope}
+    \clip [shift={(A.north east)}, xshift=0mm, yshift=-2mm] (0,0) rectangle (-5.2mm,-4mm);
+    \node[anchor=base, yshift=-0.1ex, inner sep=0pt, outer sep=0pt, minimum height=0pt, minimum width=0pt] 
+      (0,0) 
+      {\color{blizzardblue}\gtfamily\bfseries\fontsize{33}{33}\selectfont 負};
+  \end{scope}
+
+  \begin{scope}
+    \clip [shift={(C.north east)}, xshift=0mm, yshift=-2mm] circle (7mm);
+    \node[anchor=base, yshift=0ex, inner sep=0pt, outer sep=0pt, minimum height=0pt, minimum width=0pt]
+      [right=-8pt of B.east]
+      {\color{orange}\mdseries\fontsize{32}{32}\selectfont ヒ};
+  \end{scope}
+
+  \begin{scope}
+    \clip [shift={(D.south east)}, xshift=0mm, yshift=0mm] circle (7mm);
+    \node[anchor=base, yshift=0ex, inner sep=0pt, outer sep=0pt, minimum height=0pt, minimum width=0pt]
+      [right=-7pt of C.east]
+      {\color{yellow}\mdseries\fontsize{32}{32}\selectfont ロ};
+  \end{scope}
+
+  \begin{scope}
+    \clip [shift={(F.north west)}, xshift=0mm, yshift=0mm] circle (7mm);
+    \node[anchor=base, yshift=0ex, inner sep=0pt, outer sep=0pt, minimum height=0pt, minimum width=0pt]
+      [right=-9pt of E.east]
+      {\color{bleudefrance}\mdseries\fontsize{32}{32}\selectfont ン};
+  \end{scope}
+
+\end{tikzpicture}
+
+\end{document}
