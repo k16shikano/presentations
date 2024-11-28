@@ -92,6 +92,7 @@ __custom = false, __office = false, __noembed = false}
 \setbeamercolor{frametitle}{fg=white}
 \setbeamercolor{normal text}{fg=black}
 \setbeamercolor{structure}{fg=black}
+\setbeamersize{text margin left=12pt, text margin right=12pt}
 
 \define@key{beamerframe}{t}[true]{% top
   \beamer@frametopskip=.2cm plus .5\paperheight\relax%
@@ -108,9 +109,8 @@ __custom = false, __office = false, __noembed = false}
                      callout absolute pointer={#1} }
 }
 
-\setlength{\leftmargini}{12pt}
-\setlength{\leftmarginii}{12pt}
-
+\settowidth{\leftmargini}{12pt}
+\settowidth{\leftmarginii}{12pt}
 
 \patchcmd{\@makefnmark}{\@textsuperscript}{\@makefnmark@aux}{}{}
 \newcommand*{\@makefnmark@aux}[1]{[#1]}
