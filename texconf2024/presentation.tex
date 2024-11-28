@@ -2,12 +2,14 @@
 \usepackage{mypresentation}
 \usetikzlibrary{positioning,calc}
 
+% for makein
 \definecolor{blizzardblue}{rgb}{0.67, 0.9, 0.93}
 \definecolor{bleudefrance}{rgb}{0.19, 0.55, 0.91}
 
 \protected\def\pdfliteral{\pdfextension literal}
 \newcommand{\TikZ}{Ti\textit{k}Z}
 
+\def\coloredtitle{}
 \title{文字の一部に色を塗る}
 \author{\sffamily 鹿野 桂一郎\\
 \bfseries ラムダノート株式会社\\
@@ -24,14 +26,13 @@
 \setbeamercolor{frametitle}{bg=kachi, fg=white}
 \setbeamercolor{structure}{fg=kachi}
 
-\begin{frame}[t]{\inhibitglue 文字に色を塗りたい}
+\begin{frame}[t]{\inhibitglue 目次}
   \sffamily
   \begin{itemize}
     \item 文字の色は均一であることが多い
     \item 1文字が複数の色で塗り分けられる場合
-    \item TeXにおけるアプローチ
+    \item 実装編（特に装飾的タイポグラフィを\TeX{}で）
   \end{itemize}
-  \vfill
 \end{frame}
 
 \begin{frame}[t]{文字の色は均一であることが多い}
@@ -46,6 +47,10 @@
   \end{center}
 \raggedleft\tiny\color{50gray} 『n月刊ラムダノート Vol.4, No.3』 ラムダノート 2024
 \end{frame}
+
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=miru!15]
+\setbeamercolor{frametitle}{bg=miru, fg=white}
+\setbeamercolor{structure}{fg=miru}
 
 \begin{frame}[t]{1文字が複数の色で塗り分けられる場合}
   \sffamily
@@ -127,6 +132,38 @@
   \end{center}
 \end{frame}
 
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=yamabuki!15]
+\setbeamercolor{frametitle}{bg=yamabuki, fg=black}
+\setbeamercolor{structure}{fg=yamabuki}
+
+\begin{frame}[plain]
+  \begin{center}
+    \HUGE{34}{34}\color{black}
+    実装編
+  \end{center}
+\end{frame}
+
+\begin{frame}[t]{グリフのパスをクリップして背景を描画}
+  \sffamily
+  \begin{itemize}
+  \item PostScriptでよく知られている方法
+  \end{itemize}
+  \begin{columns}[t]
+    \begin{column}{.35\textwidth}
+  \begin{enumerate}
+\item グリフのパスをクリップする
+\item 色①で領域を塗り潰す
+\item 色②で領域を塗り潰す
+  \end{enumerate}
+    \end{column}
+    \begin{column}{.6\textwidth}
+  \begin{center}
+    \includegraphics[width=\textwidth]{figures/w-clip-ps.pdf}
+    \vfill
+  \end{center}
+    \end{column}
+  \end{columns}
+\end{frame}
 
 \begin{frame}[fragile]{グリフのパスをクリップして背景を描画}
   \sffamily
@@ -137,20 +174,19 @@
   \HUGE{8}{9}
   \begin{Verbatim}[commandchars=\\\{\}, breaklines=true, breakanywhere=true]
 \KeywordTok{newpath}
-\DecValTok{5} \DecValTok{5} \KeywordTok{moveto}
+\DecValTok{0} \DecValTok{0} \KeywordTok{moveto}
 \StringTok{(W)} \KeywordTok{true}
 \KeywordTok{charpath} \KeywordTok{clip}
 
 \DecValTok{50} \KeywordTok{setlinewidth}
-
-\DecValTok{1} \DecValTok{0} \DecValTok{0} \KeywordTok{setrgbcolor}
-\DecValTok{0} \DecValTok{25} \KeywordTok{moveto}
-\DecValTok{25} \DecValTok{25} \KeywordTok{lineto}
+\DecValTok{0} \DecValTok{0} \DecValTok{0} \KeywordTok{setrgbcolor}
+\DecValTok{0} \DecValTok{0} \KeywordTok{moveto}
+\DecValTok{50} \DecValTok{0} \KeywordTok{lineto}
 \KeywordTok{stroke}
 
-\DecValTok{0} \DecValTok{0} \DecValTok{1} \KeywordTok{setrgbcolor}
-\DecValTok{25} \DecValTok{25} \KeywordTok{moveto}
-\DecValTok{50} \DecValTok{25} \KeywordTok{lineto}
+\DecValTok{1} \DecValTok{0} \DecValTok{0} \KeywordTok{setrgbcolor}
+\DecValTok{25} \DecValTok{50} \KeywordTok{moveto}
+\DecValTok{50} \DecValTok{50} \KeywordTok{lineto}
 \KeywordTok{stroke}
   \end{Verbatim}
   \end{tcolorbox}
@@ -159,24 +195,38 @@
   \begin{center}
     \mbox{}
     \vfill
-    \includegraphics[width=.75\textwidth]{figures/temp.pdf}
+    \includegraphics[width=.75\textwidth]{figures/wclip-ps.pdf}
     \vfill
   \end{center}
     \end{column}
   \end{columns}
 \end{frame}
 
+\begin{frame}[t]{グリフのパスをクリップして背景を描画}
+  \sffamily
+  \begin{itemize}
+\item Illustratorではもちろん使える
+\item CSSでも使える
+  \begin{itemize}
+  \item \texttt{background-clip: text;}
+  \item \texttt{background-image: linear-gradient(...)}
+  \end{itemize}  
+\item MS Wordにはそもそもワードアートしかない（が、ワードアートも原理は同じ）
+\item PDFには該当の命令がない（\texttt{W}命令でクリップできるのはグラフィックのみ）
+  \end{itemize}
+\end{frame}
+
 \begin{frame}[t]{\TikZ{}による実現方法}
   \sffamily
   \begin{columns}[t]
-    \begin{column}{.5\textwidth}
-  \begin{itemize}
+    \begin{column}{.4\textwidth}
+  \begin{enumerate}
 \item 色①で文字を書く
 \item その文字の範囲のうち、「色②にしたい領域を切り出すパス」を書いて、\texttt{\textbackslash{}clip}する
 \item 同じ座標に色②で文字を書く
-  \end{itemize}
+  \end{enumerate}
     \end{column}
-    \begin{column}{.5\textwidth}
+    \begin{column}{.6\textwidth}
   \begin{center}
     \includegraphics[width=\textwidth]{figures/w-clip.pdf}
   \end{center}
@@ -184,11 +234,11 @@
   \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{グリフのパスをクリップして背景を描画}
+\begin{frame}[fragile]{\TikZ{}による実現方法}
   \sffamily
   \vspace*{-\baselineskip}
   \begin{columns}[t]
-    \begin{column}{.5\textwidth}
+    \begin{column}{.55\textwidth}
   \begin{tcolorbox}[sharp corners]
   \HUGE{8}{9}
   \begin{Verbatim}[commandchars=\\\{\}, breaklines=true, breakanywhere=true]
@@ -198,22 +248,22 @@
 
 \KeywordTok{\textbackslash{}begin}\NormalTok{\{}\ExtensionTok{tikzpicture}\NormalTok{\}}
   \FunctionTok{\textbackslash{}node}\NormalTok{ (0,0) }
-    \NormalTok{\{}\FunctionTok{\textbackslash{}color}\NormalTok{\{black\}}\FunctionTok{\textbackslash{}Huge}\NormalTok{ W\};}
+    \NormalTok{\{}\FunctionTok{\textbackslash{}color}\NormalTok{\{black\}}\FunctionTok{\textbackslash{}bfseries}\NormalTok{ W\};}
   \FunctionTok{\textbackslash{}clip}\NormalTok{ (0, 0) }
     \NormalTok{rectangle (0.5, 0.5);}
   \FunctionTok{\textbackslash{}node}\NormalTok{ (0,0) }
-    \NormalTok{\{}\FunctionTok{\textbackslash{}color}\NormalTok{\{red\}}\FunctionTok{\textbackslash{}Huge}\NormalTok{ W\};}
+    \NormalTok{\{}\FunctionTok{\textbackslash{}color}\NormalTok{\{red\}}\FunctionTok{\textbackslash{}bfseries}\NormalTok{ W\};}
 \KeywordTok{\textbackslash{}end}\NormalTok{\{}\ExtensionTok{tikzpicture}\NormalTok{\}}
 
 \KeywordTok{\textbackslash{}end}\NormalTok{\{}\ExtensionTok{document}\NormalTok{\}}
   \end{Verbatim}
   \end{tcolorbox}
     \end{column}
-    \begin{column}{.5\textwidth}
+    \begin{column}{.45\textwidth}
   \begin{center}
     \mbox{}
     \vfill
-    \includegraphics[width=.75\textwidth]{figures/wclip.pdf}
+    \includegraphics[width=.85\textwidth]{figures/wclip.pdf}
     \vfill
   \end{center}
     \end{column}
@@ -409,6 +459,16 @@
 \end{center}
 \end{frame}
 
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=black!15]
+\setbeamercolor{frametitle}{bg=black, fg=white}
+\setbeamercolor{structure}{fg=black}
+
+\begin{frame}[plain]
+  \begin{center}
+    \HUGE{34}{34}\color{black}
+    関連研究の紹介
+  \end{center}
+\end{frame}
 
 \begin{frame}[t]{ハングルの字母の塗り分け}
   \sffamily
