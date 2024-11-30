@@ -375,8 +375,8 @@
 \begin{frame}[t]{ちょっと「版ズレ」してるけど文字}
 \begin{center}
 
-% beamerのせいか、200ptのフォントサイズを指定しても微妙に小さくなってしまうので、PDFでフォントを実測して逆算して207.78ptとしている
-% yshiftにも謎の補正-7ptが必要
+% beamerのせいか、200ptのフォントサイズを指定しても微妙に小さくなってしまうので、PDFでフォントを実測して逆算して207.78ptとしている → 和文字補正の0.962216の逆数かも！
+% yshiftにも謎の補正-7ptが必要 → これは大きくした分を下げる必要があるだけっぽい？
 % いずれもふつうの文書クラスでは不要
 \begin{tikzpicture}
   \node[anchor=base, yshift=-0ex, inner sep=0pt, outer sep=0pt, minimum height=0pt, minimum width=0pt] 
